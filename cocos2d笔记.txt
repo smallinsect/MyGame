@@ -1,0 +1,8 @@
+创建项目
+进入cmd模式，切换目录
+cd D:\cocos2d-x-3.17.1\tools\cocos2d-console\bin
+运行脚本，创建新项目
+cocos new LittlePlane -p com.cainiao.org -l cpp -d E:/smallinsect/GameProject/cocosgame
+打开proj.win32文件夹下的LittleDemo.sln
+按下F5，运行项目
+

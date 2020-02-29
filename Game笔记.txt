@@ -1,0 +1,7 @@
+int w = GetSystemMetrics(SM_CXSCREEN);//获取桌面屏幕宽度
+int h = GetSystemMetrics(SM_CYSCREEN);//获取桌面屏幕高度
+//移动窗口位置0,0，窗口大小宽w，高h
+MoveWindow(0, 0, w, h);
+
+
+

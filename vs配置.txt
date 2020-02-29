@@ -1,0 +1,8 @@
+# WindowsAPI
+输出目录
+$(SolutionDir)..\bin\$(Platform)\$(Configuration)\
+中检目录
+$(SolutionDir)..\bintemp\$(Platform)\$(ProjectName)\$(Configuration)\
+
+
+#define _CRT_SECURE_NO_WARNINGS

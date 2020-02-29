@@ -1,0 +1,14 @@
+ubantu安装配置github
+
+安装git
+sudo apt-get install git
+
+查看git版本
+git --version
+
+配置user.name和user.email
+git config --global user.name "名字"
+git config --global user.email "邮箱"
+查看配置
+git config --list
+
