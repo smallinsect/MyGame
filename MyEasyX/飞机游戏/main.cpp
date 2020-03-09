@@ -2,42 +2,76 @@
 #include <conio.h>
 #include <stdio.h>
 #include <windows.h>
+#include <time.h>
+#include <stdlib.h>
 
 #define WIDTH 40 //窗口宽度
 #define HIGH 30 //窗口高度
 
 int main() {
-	//小球坐标，初始化
-	int ball_x = WIDTH / 2;
-	int ball_y = HIGH / 2;
-	//小球速度
-	int ball_vx = 1;
-	int ball_vy = 1;
+	
+	srand((UINT)time(NULL));
 
-	int x = 0;
+	int x = 20;
 	int y = 0;
+	int i = 0;
+	int j = 0;
+	int isFire = 0;
+	int weizi = rand() % 30 + 2;
+
+	char input;
 	while (1) {
 		system("cls");
 
-		for (y = 0; y < ball_y; y++) {
-			printf("\n");
-		}
-		for (x = 0; x < ball_x; x++) {
+		for (i = 0; i < weizi; i++) {
 			printf(" ");
 		}
-		printf("0\n");
+		printf("+\n");
 
+		if (isFire) {
+			for (i = 0; i < x; i++) {
+				for (j = 0; j < y; j++) {
+					printf(" ");
+				}
+				printf("  |\n");
+			}
+			isFire = 0;
+			if (y+2 == weizi) {//靶子被子弹击中
+				weizi = rand() % 30 + 2;//靶子被击中，重新生成位置
+			}
+		}
+		else {
+			for (i = 0; i < x; i++) {
+				printf("\n");
+			}
+		}
 
-		Sleep(3);
-		//ball_x += ball_vx;
-		//ball_y += ball_vy;
+		//飞机移动
+		for (j = 0; j < y; j++) {
+			printf(" ");
+		}
+		printf("  *\n");
+		for (j = 0; j < y; j++) {
+			printf(" ");
+		}
+		printf("*****\n");
+		for (j = 0; j < y; j++) {
+			printf(" ");
+		}
+		printf(" * *\n");
+		Sleep(30);
 
-		//if (ball_x <= 0 || ball_x >= WIDTH) {
-		//	ball_vx = -ball_vx;
-		//}
-		//if (ball_y <= 0 || ball_y >= HIGH) {
-		//	ball_vy = -ball_vy;
-		//}
+		input = _getch();
+		if (input == 's')
+			x++;
+		if (input == 'w')
+			x--;
+		if (input == 'a')
+			y--;
+		if (input == 'd')
+			y++;
+		if (input == ' ')
+			isFire = 1;
 	}
 
 	return 0;
