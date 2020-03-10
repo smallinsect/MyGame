@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "飞机游戏", "飞机游�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "游戏框架", "游戏框架\游戏框架.vcxproj", "{E03F0AFE-FF77-4CC7-B1D2-7063DE561FC4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "飞机游戏1.0", "飞机游戏1.0\飞机游戏1.0.vcxproj", "{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{E03F0AFE-FF77-4CC7-B1D2-7063DE561FC4}.Release|x64.Build.0 = Release|x64
 		{E03F0AFE-FF77-4CC7-B1D2-7063DE561FC4}.Release|x86.ActiveCfg = Release|Win32
 		{E03F0AFE-FF77-4CC7-B1D2-7063DE561FC4}.Release|x86.Build.0 = Release|Win32
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Debug|x64.ActiveCfg = Debug|x64
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Debug|x64.Build.0 = Debug|x64
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Debug|x86.ActiveCfg = Debug|Win32
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Debug|x86.Build.0 = Debug|Win32
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Release|x64.ActiveCfg = Release|x64
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Release|x64.Build.0 = Release|x64
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Release|x86.ActiveCfg = Release|Win32
+		{6CFF0363-F0C7-4ECD-83B4-280A118B6B6B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
