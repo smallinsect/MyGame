@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyEasyX", "MyEasyX\MyEasyX.vcxproj", "{33D3CD9D-8E73-45CC-902D-011D18BC6BB4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo01", "Demo01\Demo01.vcxproj", "{E82E6BF1-1773-4723-8596-D81A8D753A69}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo02", "Demo02\Demo02.vcxproj", "{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "弹跳球", "弹跳球\弹跳球.vcxproj", "{40E84000-EF65-4833-ACDE-94A963FB5ED9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "飞机游戏", "飞机游戏\飞机游戏.vcxproj", "{C1C10859-5639-42A4-AB2A-039399109839}"
@@ -33,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "画多条颜色渐变的直
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "红蓝交替画线", "红蓝交替画线\红蓝交替画线.vcxproj", "{41EAFE8A-C65F-4D2B-B691-D18A352D14B2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "小球移动", "小球移动\小球移动.vcxproj", "{B2A700DE-DDC5-4981-9FAA-77145E831154}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -49,22 +47,6 @@ Global
 		{33D3CD9D-8E73-45CC-902D-011D18BC6BB4}.Release|x64.Build.0 = Release|x64
 		{33D3CD9D-8E73-45CC-902D-011D18BC6BB4}.Release|x86.ActiveCfg = Release|Win32
 		{33D3CD9D-8E73-45CC-902D-011D18BC6BB4}.Release|x86.Build.0 = Release|Win32
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Debug|x64.ActiveCfg = Debug|x64
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Debug|x64.Build.0 = Debug|x64
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Debug|x86.ActiveCfg = Debug|Win32
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Debug|x86.Build.0 = Debug|Win32
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Release|x64.ActiveCfg = Release|x64
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Release|x64.Build.0 = Release|x64
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Release|x86.ActiveCfg = Release|Win32
-		{E82E6BF1-1773-4723-8596-D81A8D753A69}.Release|x86.Build.0 = Release|Win32
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Debug|x64.ActiveCfg = Debug|x64
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Debug|x64.Build.0 = Debug|x64
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Debug|x86.ActiveCfg = Debug|Win32
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Debug|x86.Build.0 = Debug|Win32
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Release|x64.ActiveCfg = Release|x64
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Release|x64.Build.0 = Release|x64
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Release|x86.ActiveCfg = Release|Win32
-		{46AF51CF-2587-4EF5-9D49-68A1D3D0BCFD}.Release|x86.Build.0 = Release|Win32
 		{40E84000-EF65-4833-ACDE-94A963FB5ED9}.Debug|x64.ActiveCfg = Debug|x64
 		{40E84000-EF65-4833-ACDE-94A963FB5ED9}.Debug|x64.Build.0 = Debug|x64
 		{40E84000-EF65-4833-ACDE-94A963FB5ED9}.Debug|x86.ActiveCfg = Debug|Win32
@@ -161,6 +143,14 @@ Global
 		{41EAFE8A-C65F-4D2B-B691-D18A352D14B2}.Release|x64.Build.0 = Release|x64
 		{41EAFE8A-C65F-4D2B-B691-D18A352D14B2}.Release|x86.ActiveCfg = Release|Win32
 		{41EAFE8A-C65F-4D2B-B691-D18A352D14B2}.Release|x86.Build.0 = Release|Win32
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Debug|x64.ActiveCfg = Debug|x64
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Debug|x64.Build.0 = Debug|x64
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Debug|x86.ActiveCfg = Debug|Win32
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Debug|x86.Build.0 = Debug|Win32
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Release|x64.ActiveCfg = Release|x64
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Release|x64.Build.0 = Release|x64
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Release|x86.ActiveCfg = Release|Win32
+		{B2A700DE-DDC5-4981-9FAA-77145E831154}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
