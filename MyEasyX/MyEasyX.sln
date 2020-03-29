@@ -45,6 +45,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "双人游戏异步输入", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "飞机游戏3.0", "飞机游戏3.0\飞机游戏3.0.vcxproj", "{D8C6988B-9CD3-40BD-81F4-2D9536F3B5F3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "飞机游戏3.1", "飞机游戏3.1\飞机游戏3.1.vcxproj", "{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -221,6 +223,14 @@ Global
 		{D8C6988B-9CD3-40BD-81F4-2D9536F3B5F3}.Release|x64.Build.0 = Release|x64
 		{D8C6988B-9CD3-40BD-81F4-2D9536F3B5F3}.Release|x86.ActiveCfg = Release|Win32
 		{D8C6988B-9CD3-40BD-81F4-2D9536F3B5F3}.Release|x86.Build.0 = Release|Win32
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Debug|x64.ActiveCfg = Debug|x64
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Debug|x64.Build.0 = Debug|x64
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Debug|x86.ActiveCfg = Debug|Win32
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Debug|x86.Build.0 = Debug|Win32
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Release|x64.ActiveCfg = Release|x64
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Release|x64.Build.0 = Release|x64
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Release|x86.ActiveCfg = Release|Win32
+		{816C6148-B5A9-4F61-9A51-C0FF2C5C5858}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
