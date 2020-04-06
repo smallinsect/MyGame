@@ -53,6 +53,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "飞机游戏5.0", "飞机�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "俄罗斯方块", "俄罗斯方块\俄罗斯方块.vcxproj", "{CBB55F04-0D16-4E46-B302-F1A88A262C60}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "俄罗斯方块1.0", "俄罗斯方块1.0\俄罗斯方块1.0.vcxproj", "{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -261,6 +263,14 @@ Global
 		{CBB55F04-0D16-4E46-B302-F1A88A262C60}.Release|x64.Build.0 = Release|x64
 		{CBB55F04-0D16-4E46-B302-F1A88A262C60}.Release|x86.ActiveCfg = Release|Win32
 		{CBB55F04-0D16-4E46-B302-F1A88A262C60}.Release|x86.Build.0 = Release|Win32
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Debug|x64.ActiveCfg = Debug|x64
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Debug|x64.Build.0 = Debug|x64
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Debug|x86.ActiveCfg = Debug|Win32
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Debug|x86.Build.0 = Debug|Win32
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Release|x64.ActiveCfg = Release|x64
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Release|x64.Build.0 = Release|x64
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Release|x86.ActiveCfg = Release|Win32
+		{2D03DAE2-6C5F-400D-A478-12EC3AC63DE1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
