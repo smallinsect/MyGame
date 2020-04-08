@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <conio.h>
 #include <stdio.h>
 #include <time.h>
@@ -6,13 +8,14 @@
 
 #pragma comment(lib, "Winmm.lib")
 
-#define High 7//游戏画面尺寸
-#define Width 20
+#define High 20//游戏画面尺寸
+#define Width 60
 
 int frame[High][Width];
-int pos[10] = { 0, 4, 8, 12 };// 显示数字的位置
+//int pos[10] = { 0, 4, 8, 12 };// 显示数字的位置
+char strTime[64];// 字符串时间
 
-int num[12][7][4] = {
+int num[13][7][4] = {
 	{
 		{0, 1, 1, 0}, // 0
 		{1, 0, 0, 1},
@@ -109,8 +112,59 @@ int num[12][7][4] = {
 		{0, 1, 1, 0},
 		{0, 1, 1, 0},
 		{0, 0, 0, 0},
+	},{
+		{0, 0, 0, 0},// ' '
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
 	},
 };
+
+int Idx(char ch) {
+	if (ch == '0') {
+		return 0;
+	}
+	if (ch == '1') {
+		return 1;
+	}
+	if (ch == '2') {
+		return 2;
+	}
+	if (ch == '3') {
+		return 3;
+	}
+	if (ch == '4') {
+		return 4;
+	}
+	if (ch == '5') {
+		return 5;
+	}
+	if (ch == '6') {
+		return 6;
+	}
+	if (ch == '7') {
+		return 7;
+	}
+	if (ch == '8') {
+		return 8;
+	}
+	if (ch == '9') {
+		return 9;
+	}
+	if (ch == '-') {
+		return 10;
+	}
+	if (ch == ':') {
+		return 11;
+	}
+	if (ch == ' ') {
+		return 12;
+	}
+	return 0;
+}
 
 //全局变量
 void gotoxy(int x, int y) {
@@ -158,28 +212,28 @@ void show() {
 }
 //与用户输入无关的更新
 void updateWithoutInput() {
-	static int k = 0;
+	SYSTEMTIME st;
+	//获取当前系统时间
+	GetLocalTime(&st);
+	//sprintf(strTime, "%4d - %02d - %02d %02d : %02d : %02d",
+	//	st.wYear, st.wMonth, st.wDay,
+	//	st.wHour, st.wMinute, st.wSecond);
+	sprintf(strTime, "%02d:%02d:%02d",
+		st.wHour, st.wMinute, st.wSecond);
 
-	int i, j, p;
-	for (p = 0; p < 16; p += 4) {
-		for (i = 0; i < 7; i++) {
-			for (j = 0; j < 4; j++) {
-				frame[i][j + p] = num[k][i][j];
+	for (int pos = 0; strTime[pos] != '\0'; pos++) {
+		int idx = Idx(strTime[pos]);
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 4; j++) {
+				frame[i][j + pos * 4] = num[idx][i][j];
 			}
 		}
 	}
 
-	k++;
-	if (k >= 12) {
-		k = 0;
-	}
 	Sleep(500);
 }
 //与用户输入有关的更新
 void updateWithInput() {
-	SYSTEMTIME st;
-	//获取当前系统时间
-	GetLocalTime(&st);
 }
 
 int main() {
