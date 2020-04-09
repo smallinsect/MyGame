@@ -14,6 +14,7 @@
 int frame[High][Width];
 //int pos[10] = { 0, 4, 8, 12 };// 显示数字的位置
 char strTime[64];// 字符串时间
+char symbol[20] = "0123456789-: ";
 
 int num[13][7][4] = {
 	{
@@ -124,46 +125,12 @@ int num[13][7][4] = {
 };
 
 int Idx(char ch) {
-	if (ch == '0') {
-		return 0;
+	for (int i = 0; symbol[i] != '\0'; i++) {
+		if (ch == symbol[i]) {
+			return i;
+		}
 	}
-	if (ch == '1') {
-		return 1;
-	}
-	if (ch == '2') {
-		return 2;
-	}
-	if (ch == '3') {
-		return 3;
-	}
-	if (ch == '4') {
-		return 4;
-	}
-	if (ch == '5') {
-		return 5;
-	}
-	if (ch == '6') {
-		return 6;
-	}
-	if (ch == '7') {
-		return 7;
-	}
-	if (ch == '8') {
-		return 8;
-	}
-	if (ch == '9') {
-		return 9;
-	}
-	if (ch == '-') {
-		return 10;
-	}
-	if (ch == ':') {
-		return 11;
-	}
-	if (ch == ' ') {
-		return 12;
-	}
-	return 0;
+	return -1;
 }
 
 //全局变量
@@ -225,7 +192,7 @@ void updateWithoutInput() {
 		int idx = Idx(strTime[pos]);
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 4; j++) {
-				frame[i][j + pos * 4] = num[idx][i][j];
+				frame[i][j + pos * 4 + 1] = num[idx][i][j];
 			}
 		}
 	}
