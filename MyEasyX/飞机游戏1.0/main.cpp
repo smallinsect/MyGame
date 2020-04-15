@@ -66,7 +66,7 @@ void startup() {
 	score = 0;
 
 	//—≠ª∑≤•∑≈“Ù¿÷
-	mciSendString(TEXT("open ./music/bgmusic.mp3 alias bkmusic"), NULL, 0, NULL);//±≥æ∞“Ù¿÷
+	mciSendString(TEXT("open ./music/bgm.mp3 alias bkmusic"), NULL, 0, NULL);//±≥æ∞“Ù¿÷
 	mciSendString(TEXT("play bkmusic repeat"), NULL, 0, NULL);//—≠ª∑≤•∑≈
 }
 //œ‘ æª≠√Ê
