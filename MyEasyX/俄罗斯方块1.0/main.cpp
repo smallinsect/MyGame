@@ -35,6 +35,20 @@ IMAGE frame;//
 int dx = 0;
 bool rotate = 0;
 int colorNum = 1;
+float timer = 0, delay = 0.3;
+
+bool check() {
+	for (int i = 0; i < 4; i++) {
+		if (a[i].x < 0 || a[i].x >= N || a[i].y >= M) {
+			return false;
+		}
+		else if (field[a[i].y][a[i].x]) {
+			return false;
+		}
+	}
+
+	return true;
+}
 
 //数据初始化
 void startup() {
@@ -46,7 +60,7 @@ void startup() {
 	// 坐标(0, 0)，宽度(18, 18)，image中的坐标(0,0)
 	//putimage(0, 0, 18, 18, &tiles, 0, 0);
 
-	int n = 2;
+	int n = rand() % 7;
 	for (int i = 0; i < 4; i++) {
 		a[i].x = figures[n][i] % 2;
 		a[i].y = figures[n][i] / 2;
@@ -62,16 +76,48 @@ void show() {
 	for (int i = 0; i < 4; i++) {
 		putimage(a[i].x * 18, a[i].y * 18, 18, 18, &tiles, 0, 0);
 	}
-
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < N; j++) {
+			if (field[i][j] == 0) {
+				continue;
+			}
+			putimage(j * 18, i * 18, 18, 18, &tiles, 0, 0);
+		}
+	}
 
 	FlushBatchDraw();
-	Sleep(50);
 }
 //于用户输入无关的更新
 void updateWithoutInput() {
+	static clock_t sstart = 0;
+	clock_t cur = clock();
+	if (cur - sstart > 300) {
+		sstart = cur;
+		for (int i = 0; i < 4; i++) {
+			b[i] = a[i];
+			a[i].y += 1;
+		}
+		if (!check()) {
+			for (int i = 0; i < 4; i++) {
+				field[b[i].y][b[i].x] = 1;
+			}
+			int n = rand() % 7;
+			for (int i = 0; i < 4; i++) {
+				a[i].x = figures[n][i] % 2;
+				a[i].y = figures[n][i] / 2;
+			}
+		}
+	}
+
 	//// <- Move -> ///
 	for (int i = 0; i < 4; i++) {
+		b[i] = a[i];
 		a[i].x += dx;
+	}
+	if (!check()) {
+		for (int i = 0; i < 4; i++) {
+			a[i] = b[i];
+		}
 	}
 
 	//////Rotate//////
@@ -82,6 +128,11 @@ void updateWithoutInput() {
 			int y = a[i].x - p.x;
 			a[i].x = p.x - x;
 			a[i].y = p.y + y;
+		}
+		if (!check()) {
+			for (int i = 0; i < 4; i++) {
+				a[i] = b[i];
+			}
 		}
 	}
 }
@@ -101,7 +152,12 @@ void updateWithInput() {
 }
 
 void clean() {
+	for (int i = 0; i < 4; i++) {
+		clearrectangle(a[i].x * 18, a[i].y * 18, a[i].x * 18 + 18, a[i].y * 18 + 18);
+	}
+	//clearrectangle(x, y, x + 32, y + 32);
 
+	//FlushBatchDraw();
 	dx = 0;
 	rotate = 0;
 }
