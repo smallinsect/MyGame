@@ -1,9 +1,0 @@
-查看版本 gcc --version
-
-官网 http://gcc.gnu.org/
-
-安装clang软件 sudo apt-get install clang
-
-安装make工具 sudo apt-get install make
-安装cmake工具 sudo apt-get install cmake
-

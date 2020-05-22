@@ -32,6 +32,9 @@ BEGIN_MESSAGE_MAP(CMyTankView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_KEYDOWN()
+	ON_COMMAND(ID_32772, &CMyTankView::OnStartWalk)
+	ON_COMMAND(ID_32773, &CMyTankView::OnStopWalk)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CMyTankView 构造/析构
@@ -51,13 +54,19 @@ BOOL CMyTankView::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
 	// 加载坦克图片
-	HBITMAP hbmp = (HBITMAP)LoadImage(NULL, TEXT("./res/img/0Player/m0-0-1.bmp"), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
-	if (hbmp == NULL) {
-		AfxMessageBox(TEXT("加载位图失败"));
-		return CView::PreCreateWindow(cs);
-	}
-	m_tank.Attach(hbmp);
-	m_tank.GetBitmap(&m_bm);
+	//HBITMAP hbmp = (HBITMAP)LoadImage(NULL, TEXT("./res/img/0Player/m0-0-1.bmp"), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	//HBITMAP hbmp = (HBITMAP)LoadImage(NULL, TEXT("./res/walk.bmp"), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	//if (hbmp == NULL) {
+	//	AfxMessageBox(TEXT("加载位图失败"));
+	//	return CView::PreCreateWindow(cs);
+	//}
+	//m_tank.Attach(hbmp);
+	//m_tank.GetBitmap(&m_bm);
+
+	//m_pos.x = 0;
+	//m_pos.y = 0;
+
+	m_role.Init(TEXT("./res/walk.bmp"), 0, 0, 4);
 
 	return CView::PreCreateWindow(cs);
 }
@@ -145,22 +154,33 @@ void CMyTankView::OnOpenBitmap()
 
 void CMyTankView::OnPaint()
 {
-	if (m_dc.GetSafeHdc() == NULL) {
-		return;
-	}
-
 	CPaintDC dc(this);
 	CRect rect;
-	GetClientRect(&rect);
-	::FillRect(dc.GetSafeHdc(), rect, (HBRUSH)GetStockObject(WHITE_BRUSH));
-	BITMAP bm;
-	m_tank.GetBitmap(&bm);
-	dc.StretchBlt(100, 100,
-		bm.bmWidth, bm.bmHeight,
+	GetClientRect(&rect);//获取客户端大小
+	::FillRect(dc.GetSafeHdc(), rect, (HBRUSH)GetStockObject(WHITE_BRUSH));//将客户端区域变成白色
+	
+	//BITMAP bm;
+	//m_tank.GetBitmap(&bm);
+	//dc.StretchBlt(m_pos.x, m_pos.y,
+	//	bm.bmWidth, bm.bmHeight,
+	//	&m_dc,
+	//	0, 0,
+	//	bm.bmWidth, bm.bmHeight,
+	//	SRCCOPY);
+
+	CDC* pDC = GetDC();
+	m_dc.CreateCompatibleDC(pDC);//创建缓存DC
+	m_dc.SelectObject(m_tank);//缓存DC绑定坦克图片
+
+	pDC->StretchBlt(m_pos.x, m_pos.y,
+		m_bm.bmWidth, m_bm.bmHeight,
 		&m_dc,
 		0, 0,
-		bm.bmWidth, bm.bmHeight,
+		m_bm.bmWidth, m_bm.bmHeight,
 		SRCCOPY);
+	m_dc.DeleteDC();
+
+	ReleaseDC(pDC);
 }
 
 
@@ -207,5 +227,55 @@ void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 
+	if (nChar == VK_UP) {
+		m_pos.y -= 10;
+	}
+	if (nChar == VK_DOWN) {
+		m_pos.y += 10;
+	}
+	if (nChar == VK_LEFT) {
+		m_pos.x -= 10;
+	}
+	if (nChar == VK_RIGHT) {
+		m_pos.x += 10;
+	}
+	Invalidate(FALSE);
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+VOID CALLBACK TimerProc(
+	HWND hwnd,
+	UINT uMsg,
+	UINT_PTR ptr,
+	DWORD dwTime) {
+
+
+}
+
+void CMyTankView::OnStartWalk()
+{
+	// TODO: 在此添加命令处理程序代码
+	//::SetTimer(NULL, 0, 1000, TimerProc);
+	//关联窗口（常用）
+	::SetTimer(this->m_hWnd, 1, 3000, NULL);//开启定时器
+}
+
+
+void CMyTankView::OnStopWalk()
+{
+	// TODO: 在此添加命令处理程序代码
+	::KillTimer(this->m_hWnd, 1);//关闭定时器
+}
+
+
+void CMyTankView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	switch (nIDEvent) {
+	case 1:
+		break;
+	default:
+		break;
+	}
+	CView::OnTimer(nIDEvent);
 }

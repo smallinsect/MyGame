@@ -1,4 +1,0 @@
-
-g++ -o server server.cpp
-gdb ./server
-r启动调试

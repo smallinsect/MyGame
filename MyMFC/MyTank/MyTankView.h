@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CMyRole.h"
 
 class CMyTankView : public CView
 {
@@ -40,6 +41,9 @@ protected:
 	CBitmap m_tank;
 	BITMAP m_bm;
 	CDC m_dc;
+	CPoint m_pos;
+
+	CMyRole m_role;
 
 // 生成的消息映射函数
 protected:
@@ -50,6 +54,9 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnStartWalk();
+	afx_msg void OnStopWalk();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 #ifndef _DEBUG  // MyTankView.cpp 中的调试版本
