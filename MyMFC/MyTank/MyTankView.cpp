@@ -169,16 +169,19 @@ void CMyTankView::OnPaint()
 	//	SRCCOPY);
 
 	CDC* pDC = GetDC();
-	m_dc.CreateCompatibleDC(pDC);//创建缓存DC
-	m_dc.SelectObject(m_tank);//缓存DC绑定坦克图片
+	
+	m_role.Draw(pDC, m_pos.x, m_pos.y);
+	m_role.Update();
+	//m_dc.CreateCompatibleDC(pDC);//创建缓存DC
+	//m_dc.SelectObject(m_tank);//缓存DC绑定坦克图片
 
-	pDC->StretchBlt(m_pos.x, m_pos.y,
-		m_bm.bmWidth, m_bm.bmHeight,
-		&m_dc,
-		0, 0,
-		m_bm.bmWidth, m_bm.bmHeight,
-		SRCCOPY);
-	m_dc.DeleteDC();
+	//pDC->StretchBlt(m_pos.x, m_pos.y,
+	//	m_bm.bmWidth, m_bm.bmHeight,
+	//	&m_dc,
+	//	0, 0,
+	//	m_bm.bmWidth, m_bm.bmHeight,
+	//	SRCCOPY);
+	//m_dc.DeleteDC();
 
 	ReleaseDC(pDC);
 }
@@ -208,19 +211,19 @@ void CMyTankView::OnLButtonUp(UINT nFlags, CPoint point)
 
 
 void CMyTankView::PaintPlayer(int x, int y) {
-	CDC* pDC = GetDC();
-	m_dc.CreateCompatibleDC(pDC);//创建缓存DC
-	m_dc.SelectObject(m_tank);//缓存DC绑定坦克图片
+	//CDC* pDC = GetDC();
+	//m_dc.CreateCompatibleDC(pDC);//创建缓存DC
+	//m_dc.SelectObject(m_tank);//缓存DC绑定坦克图片
 
-	pDC->StretchBlt(x, y,
-		m_bm.bmWidth, m_bm.bmHeight,
-		&m_dc,
-		0, 0,
-		m_bm.bmWidth, m_bm.bmHeight,
-		SRCCOPY);
-	m_dc.DeleteDC();
+	//pDC->StretchBlt(x, y,
+	//	m_bm.bmWidth, m_bm.bmHeight,
+	//	&m_dc,
+	//	0, 0,
+	//	m_bm.bmWidth, m_bm.bmHeight,
+	//	SRCCOPY);
+	//m_dc.DeleteDC();
 
-	ReleaseDC(pDC);
+	//ReleaseDC(pDC);
 }
 
 void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -229,15 +232,19 @@ void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	if (nChar == VK_UP) {
 		m_pos.y -= 10;
+		m_role.SetDirection(CMyRole::DIREC::M_Up);
 	}
 	if (nChar == VK_DOWN) {
 		m_pos.y += 10;
+		m_role.SetDirection(CMyRole::DIREC::M_Down);
 	}
 	if (nChar == VK_LEFT) {
 		m_pos.x -= 10;
+		m_role.SetDirection(CMyRole::DIREC::M_Left);
 	}
 	if (nChar == VK_RIGHT) {
 		m_pos.x += 10;
+		m_role.SetDirection(CMyRole::DIREC::M_Right);
 	}
 	Invalidate(FALSE);
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
@@ -273,6 +280,7 @@ void CMyTankView::OnTimer(UINT_PTR nIDEvent)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	switch (nIDEvent) {
 	case 1:
+
 		break;
 	default:
 		break;

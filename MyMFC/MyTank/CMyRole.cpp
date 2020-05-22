@@ -9,9 +9,28 @@ void CMyRole::Init(LPTSTR name, int iPerFrameWidth, int iPerFrameHeight, int iFr
 	}
 	m_role.Attach(hbmp);
 	m_role.GetBitmap(&m_bm);
+
+	m_iCurFrame = 0;
+	m_iDirection = DIREC::M_Down;
+
+	m_iFrameNum = iFrameNum;
 }
 void CMyRole::Update() {
+	m_iCurFrame++;
+	if (m_iCurFrame >= m_iFrameNum) {
+		m_iCurFrame = 0;
+	}
 }
-void CMyRole::Draw(HDC hDc, int x, int y) {
+void CMyRole::Draw(CDC* pDC, int x, int y) {
+	m_dc.CreateCompatibleDC(pDC);//´´½¨»º´æDC
+	m_dc.SelectObject(m_role);//»º´æDC°ó¶¨Ì¹¿ËÍ¼Æ¬
 
+	pDC->StretchBlt(x, y,
+		m_bm.bmWidth / m_iFrameNum, m_bm.bmHeight / m_iFrameNum,
+		&m_dc,
+		m_iCurFrame * 32, m_iDirection * 32,
+		m_bm.bmWidth / m_iFrameNum, m_bm.bmHeight / m_iFrameNum,
+		SRCCOPY);
+
+	m_dc.DeleteDC();
 }

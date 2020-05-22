@@ -72,6 +72,30 @@ m_tank.Attach(hbmp);
 m_tank.GetBitmap(&m_bm);
 ```
 
+画图
+
+```
+CDC* pDC = GetDC();
+m_dc.CreateCompatibleDC(pDC);//创建缓存DC
+m_dc.SelectObject(m_tank);//缓存DC绑定坦克图片
+
+pDC->StretchBlt(x, y,
+    m_bm.bmWidth, m_bm.bmHeight,
+    &m_dc,
+    0, 0,
+    m_bm.bmWidth, m_bm.bmHeight,
+    SRCCOPY);
+m_dc.DeleteDC();
+
+ReleaseDC(pDC);
+```
+
+
+
+
+
+
+
 ```
 int w = GetSystemMetrics(SM_CXSCREEN);//获取桌面屏幕宽度
 int h = GetSystemMetrics(SM_CYSCREEN);//获取桌面屏幕高度
