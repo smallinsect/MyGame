@@ -194,6 +194,7 @@
     <ClInclude Include="CMyRole.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MyPlayerTank.h" />
     <ClInclude Include="MyTank.h" />
     <ClInclude Include="MyTankDoc.h" />
     <ClInclude Include="MyTankView.h" />
@@ -204,6 +205,7 @@
   <ItemGroup>
     <ClCompile Include="CMyRole.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MyPlayerTank.cpp" />
     <ClCompile Include="MyTank.cpp" />
     <ClCompile Include="MyTankDoc.cpp" />
     <ClCompile Include="MyTankView.cpp" />

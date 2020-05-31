@@ -168,10 +168,10 @@ void CMyTankView::OnPaint()
 	//	bm.bmWidth, bm.bmHeight,
 	//	SRCCOPY);
 
-	CDC* pDC = GetDC();
 	
-	m_role.Draw(pDC, m_pos.x, m_pos.y);
-	m_role.Update();
+	//m_role.Draw(pDC, m_pos.x, m_pos.y);
+	//m_role.Update();
+
 	//m_dc.CreateCompatibleDC(pDC);//创建缓存DC
 	//m_dc.SelectObject(m_tank);//缓存DC绑定坦克图片
 
@@ -182,6 +182,32 @@ void CMyTankView::OnPaint()
 	//	m_bm.bmWidth, m_bm.bmHeight,
 	//	SRCCOPY);
 	//m_dc.DeleteDC();
+	HBITMAP hbmp = (HBITMAP)LoadImage(NULL, TEXT("./res/img/player0/m0-0-1.bmp"), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	if (hbmp == NULL) {
+		AfxMessageBox(TEXT("加载位图失败"));
+		return;
+	}
+
+	CBitmap ptank;
+	ptank.Attach(hbmp);
+	BITMAP bm;
+	ptank.GetBitmap(&bm);
+
+	CDC* pDC = GetDC();
+
+	CDC mDC;
+	// 创建兼容内存DC
+	mDC.CreateCompatibleDC(pDC);
+	mDC.SelectObject(ptank);
+
+	pDC->StretchBlt(0, 0,
+		bm.bmWidth, bm.bmHeight,
+		&mDC,
+		0, 0,
+		bm.bmWidth, bm.bmHeight,
+		SRCCOPY);
+
+	mDC.DeleteDC();
 
 	ReleaseDC(pDC);
 }
