@@ -5,6 +5,7 @@
 #pragma once
 
 #include "CMyRole.h"
+#include "MyPlayerTank.h"
 
 class CMyTankView : public CView
 {
@@ -44,6 +45,8 @@ protected:
 	CPoint m_pos;
 
 	CMyRole m_role;
+	MyPlayerTank m_ptank;
+
 
 // 生成的消息映射函数
 protected:

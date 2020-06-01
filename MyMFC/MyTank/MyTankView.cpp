@@ -66,7 +66,8 @@ BOOL CMyTankView::PreCreateWindow(CREATESTRUCT& cs)
 	//m_pos.x = 0;
 	//m_pos.y = 0;
 
-	m_role.Init(TEXT("./res/walk.bmp"), 0, 0, 4);
+	//m_role.Init(TEXT("./res/walk.bmp"), 0, 0, 4);
+	m_ptank.Init();
 
 	return CView::PreCreateWindow(cs);
 }
@@ -157,7 +158,7 @@ void CMyTankView::OnPaint()
 	CPaintDC dc(this);
 	CRect rect;
 	GetClientRect(&rect);//获取客户端大小
-	::FillRect(dc.GetSafeHdc(), rect, (HBRUSH)GetStockObject(WHITE_BRUSH));//将客户端区域变成白色
+	::FillRect(dc.GetSafeHdc(), rect, (HBRUSH)GetStockObject(BLACK_BRUSH));//将客户端区域变成白色
 	
 	//BITMAP bm;
 	//m_tank.GetBitmap(&bm);
@@ -182,32 +183,37 @@ void CMyTankView::OnPaint()
 	//	m_bm.bmWidth, m_bm.bmHeight,
 	//	SRCCOPY);
 	//m_dc.DeleteDC();
-	HBITMAP hbmp = (HBITMAP)LoadImage(NULL, TEXT("./res/img/player0/m0-0-1.bmp"), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
-	if (hbmp == NULL) {
-		AfxMessageBox(TEXT("加载位图失败"));
-		return;
-	}
 
-	CBitmap ptank;
-	ptank.Attach(hbmp);
-	BITMAP bm;
-	ptank.GetBitmap(&bm);
+
+	//HBITMAP hbmp = (HBITMAP)LoadImage(NULL, TEXT("./res/img/player0/m0-0-1.bmp"), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	//if (hbmp == NULL) {
+	//	AfxMessageBox(TEXT("加载位图失败"));
+	//	return;
+	//}
+
+	//CBitmap ptank;
+	//ptank.Attach(hbmp);
+	//BITMAP bm;
+	//ptank.GetBitmap(&bm);
 
 	CDC* pDC = GetDC();
 
-	CDC mDC;
-	// 创建兼容内存DC
-	mDC.CreateCompatibleDC(pDC);
-	mDC.SelectObject(ptank);
+	//CDC mDC;
+	//// 创建兼容内存DC
+	//mDC.CreateCompatibleDC(pDC);
+	//mDC.SelectObject(ptank);
 
-	pDC->StretchBlt(0, 0,
-		bm.bmWidth, bm.bmHeight,
-		&mDC,
-		0, 0,
-		bm.bmWidth, bm.bmHeight,
-		SRCCOPY);
+	//pDC->StretchBlt(0, 0,
+	//	bm.bmWidth, bm.bmHeight,
+	//	&mDC,
+	//	0, 0,
+	//	bm.bmWidth, bm.bmHeight,
+	//	SRCCOPY);
 
-	mDC.DeleteDC();
+	//mDC.DeleteDC();
+
+	m_ptank.Draw(pDC, m_pos.x, m_pos.y);
+	m_ptank.Update();
 
 	ReleaseDC(pDC);
 }
@@ -256,21 +262,38 @@ void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 
+	//if (nChar == VK_UP) {
+	//	m_pos.y -= 10;
+	//	m_role.SetDirection(CMyRole::DIREC::M_Up);
+	//}
+	//if (nChar == VK_DOWN) {
+	//	m_pos.y += 10;
+	//	m_role.SetDirection(CMyRole::DIREC::M_Down);
+	//}
+	//if (nChar == VK_LEFT) {
+	//	m_pos.x -= 10;
+	//	m_role.SetDirection(CMyRole::DIREC::M_Left);
+	//}
+	//if (nChar == VK_RIGHT) {
+	//	m_pos.x += 10;
+	//	m_role.SetDirection(CMyRole::DIREC::M_Right);
+	//}
+
 	if (nChar == VK_UP) {
-		m_pos.y -= 10;
-		m_role.SetDirection(CMyRole::DIREC::M_Up);
+		m_pos.y -= 5;
+		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Up);
 	}
 	if (nChar == VK_DOWN) {
-		m_pos.y += 10;
-		m_role.SetDirection(CMyRole::DIREC::M_Down);
+		m_pos.y += 5;
+		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Down);
 	}
 	if (nChar == VK_LEFT) {
-		m_pos.x -= 10;
-		m_role.SetDirection(CMyRole::DIREC::M_Left);
+		m_pos.x -= 5;
+		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Left);
 	}
 	if (nChar == VK_RIGHT) {
-		m_pos.x += 10;
-		m_role.SetDirection(CMyRole::DIREC::M_Right);
+		m_pos.x += 5;
+		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Right);
 	}
 	Invalidate(FALSE);
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
