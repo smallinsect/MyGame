@@ -191,6 +191,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CMyBullet.h" />
     <ClInclude Include="CMyDirect.h" />
     <ClInclude Include="CMyRole.h" />
     <ClInclude Include="framework.h" />
@@ -204,6 +205,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CMyBullet.cpp" />
     <ClCompile Include="CMyDirect.cpp" />
     <ClCompile Include="CMyRole.cpp" />
     <ClCompile Include="MainFrm.cpp" />

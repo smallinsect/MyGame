@@ -6,6 +6,7 @@
 
 #include "CMyRole.h"
 #include "MyPlayerTank.h"
+#include "CMyBullet.h"
 
 class CMyTankView : public CView
 {
@@ -44,8 +45,12 @@ protected:
 	CDC m_dc;
 	CPoint m_pos;
 
+
 	CMyRole m_role;
 	MyPlayerTank m_ptank;
+
+	CMyBullet m_bullet;
+	CPoint m_posb;
 
 
 // 生成的消息映射函数

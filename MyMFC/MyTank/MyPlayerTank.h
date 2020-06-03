@@ -33,8 +33,11 @@ public:
 	void SetSpeedY(int iSpeedY) {
 		m_iSpeedY = iSpeedY;
 	}
-	void SetDirection(DIREC iDirect) {
+	void SetDirect(DIREC iDirect) {
 		m_iDirect = iDirect;
+	}
+	int GetDirection() {
+		return m_iDirect;
 	}
 
 	void Init();

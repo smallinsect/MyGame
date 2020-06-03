@@ -68,6 +68,7 @@ BOOL CMyTankView::PreCreateWindow(CREATESTRUCT& cs)
 
 	//m_role.Init(TEXT("./res/walk.bmp"), 0, 0, 4);
 	m_ptank.Init();
+	m_bullet.Init();
 
 	return CView::PreCreateWindow(cs);
 }
@@ -215,6 +216,13 @@ void CMyTankView::OnPaint()
 	m_ptank.Draw(pDC, m_pos.x, m_pos.y);
 	m_ptank.Update();
 
+	// 子弹激活
+	if (m_bullet.GetState()) {
+		m_bullet.Draw(pDC);
+		m_bullet.Update();
+	}
+	
+
 	ReleaseDC(pDC);
 }
 
@@ -279,21 +287,48 @@ void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	//	m_role.SetDirection(CMyRole::DIREC::M_Right);
 	//}
 
-	if (nChar == VK_UP) {
+	//if (nChar == VK_UP) {
+	//	m_pos.y -= 5;
+	//	m_ptank.SetDirection(MyPlayerTank::DIREC::M_Up);
+	//}
+	//if (nChar == VK_DOWN) {
+	//	m_pos.y += 5;
+	//	m_ptank.SetDirection(MyPlayerTank::DIREC::M_Down);
+	//}
+	//if (nChar == VK_LEFT) {
+	//	m_pos.x -= 5;
+	//	m_ptank.SetDirection(MyPlayerTank::DIREC::M_Left);
+	//}
+	//if (nChar == VK_RIGHT) {
+	//	m_pos.x += 5;
+	//	m_ptank.SetDirection(MyPlayerTank::DIREC::M_Right);
+	//}
+
+	if (nChar == 'W') {
 		m_pos.y -= 5;
-		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Up);
+		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Up);
 	}
-	if (nChar == VK_DOWN) {
+	if (nChar == 'S') {
 		m_pos.y += 5;
-		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Down);
+		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Down);
 	}
-	if (nChar == VK_LEFT) {
+	if (nChar == 'A') {
 		m_pos.x -= 5;
-		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Left);
+		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Left);
 	}
-	if (nChar == VK_RIGHT) {
+	if (nChar == 'D') {
 		m_pos.x += 5;
-		m_ptank.SetDirection(MyPlayerTank::DIREC::M_Right);
+		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Right);
+	}
+	if (nChar == 'J') {// 发射子弹
+		//m_pos.x += 5;
+		//m_ptank.SetDirection(MyPlayerTank::DIREC::M_Right);
+		m_posb = m_pos;
+		m_bullet.SetDirect(m_ptank.GetDirection());
+		m_bullet.SetSpeed(10, 10);
+		m_bullet.SetPos(m_pos.x + 8, m_pos.y + 8);
+		m_bullet.SetState(true);
+		SetTimer(1, 30, NULL);
 	}
 	Invalidate(FALSE);
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
@@ -329,7 +364,7 @@ void CMyTankView::OnTimer(UINT_PTR nIDEvent)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	switch (nIDEvent) {
 	case 1:
-
+		Invalidate(FALSE);
 		break;
 	default:
 		break;
