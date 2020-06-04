@@ -191,8 +191,10 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CMyBlast.h" />
     <ClInclude Include="CMyBullet.h" />
     <ClInclude Include="CMyDirect.h" />
+    <ClInclude Include="CMyEnemyTank.h" />
     <ClInclude Include="CMyRole.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
@@ -205,8 +207,10 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CMyBlast.cpp" />
     <ClCompile Include="CMyBullet.cpp" />
     <ClCompile Include="CMyDirect.cpp" />
+    <ClCompile Include="CMyEnemyTank.cpp" />
     <ClCompile Include="CMyRole.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MyPlayerTank.cpp" />

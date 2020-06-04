@@ -69,6 +69,10 @@ BOOL CMyTankView::PreCreateWindow(CREATESTRUCT& cs)
 	//m_role.Init(TEXT("./res/walk.bmp"), 0, 0, 4);
 	m_ptank.Init();
 	m_bullet.Init();
+	m_blast.Init();
+	m_blast.SetPos(CPoint(100, 100));
+	mciSendString(TEXT("open ./res/music/shoot.wav alias    shoot0"), NULL, 0, NULL);
+	//mciSendString(TEXT("play shoot0 from 0"), NULL, 0, NULL);
 
 	return CView::PreCreateWindow(cs);
 }
@@ -222,6 +226,8 @@ void CMyTankView::OnPaint()
 		m_bullet.Update();
 	}
 	
+	m_blast.Draw(pDC);
+	m_blast.Update();
 
 	ReleaseDC(pDC);
 }
@@ -329,6 +335,8 @@ void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		m_bullet.SetPos(m_pos.x + 8, m_pos.y + 8);
 		m_bullet.SetState(true);
 		SetTimer(1, 30, NULL);
+		//mciSendString(TEXT("close	shoot0"), NULL, 0, NULL);
+		mciSendString(TEXT("play shoot0 from 0"), NULL, 0, NULL);
 	}
 	Invalidate(FALSE);
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);

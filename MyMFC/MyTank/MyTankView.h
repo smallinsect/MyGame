@@ -7,6 +7,7 @@
 #include "CMyRole.h"
 #include "MyPlayerTank.h"
 #include "CMyBullet.h"
+#include "CMyBlast.h"
 
 class CMyTankView : public CView
 {
@@ -51,6 +52,8 @@ protected:
 
 	CMyBullet m_bullet;
 	CPoint m_posb;
+
+	CMyBlast m_blast;
 
 
 // 生成的消息映射函数

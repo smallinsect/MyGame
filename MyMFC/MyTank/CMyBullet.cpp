@@ -6,7 +6,7 @@ void CMyBullet::Init() {//初始化
 	TCHAR name[64];
 	HBITMAP hBmp;
 	for (int i = 0; i < 4; i++) {
-		swprintf(name, TEXT("./res/img/bullet-%d.bmp"), i);
+		swprintf(name, TEXT("./res/img/bullet/bullet-%d.bmp"), i);
 		hBmp = (HBITMAP)LoadImage(NULL, name, IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 		if (hBmp == NULL) {
 			AfxMessageBox(TEXT("加载位图失败"));
