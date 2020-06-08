@@ -124,8 +124,6 @@ StretchBlt(hDC, x1, y1, w1, h1, hMdc, x2, y2, w2, h2, SRC_PAINT)
 TransparentBlt(hDC, x1, y1, w1, h1, hMdc, x2, y2, w2, h2, RGB(0, 255, 0))
 ```
 
-
-
 ## 实际使用
 
 显示图片
@@ -297,6 +295,38 @@ BOOL KillTimer(
 
 ## 双缓冲技术
 
+实现步骤
+
+```
+1、为屏幕DC创建兼容的内存DC，使用函数：CreateCompatibleDC()
+2、创建内存位图：CreateCompatibleBitmap()
+3、把内存位图选入设备环境：SelectObject()，可以理解为选择画布，然后开始绘图操作
+4、把绘制好的图形“拷贝”到屏幕上：BitBlt()
+```
+
+实例
+
+```
+void xxxx::Paint(){
+	// 获取屏幕DC
+	HDC hDC = ::GetDC(this->m_hWnd);
+	// 创建兼容DC
+	HDC hMDC = ::CreateCompatibleDC(hDC);
+	// 创建内存位图
+	HBITMAP bBmp = ::CreateCompatibleBitmap(hDC, GAME_WIDTH, GAME_HEIGHT);
+	// 把内存位图选入设备环境中
+	HBITMAP hOldBmp = (HBITMAP)::SelectObject(hMDC, hBmp);
+	// 绘制背景
+	PaintBD(hMDC, 0, 0);
+	// 绘制人物
+	m_MyRole.Draw(hMDC, x, y);
+	// 把绘制好的图形拷贝到屏幕上
+	::BitBlt(hDC, 0, 0, GAME_WIDTH, GAME_HEIGHT, hMDC, 0, 0, SRCCOPY);
+	
+}
+```
+
+## 滚动背景
 
 
 
@@ -306,6 +336,25 @@ BOOL KillTimer(
 
 
 
+
+
+## 粒子系统
+
+粒子系统数据结构设计
+
+```
+struct snow {
+	int x;     //粒子的x坐标
+	int y;     //粒子的y坐标
+	int type;  //粒子类型
+	BOOL exist;//是否存在绘制
+} Snow[SNOW_NUMBER];
+```
+
+1. 定义数据结构
+2. 初始化
+3. 绘制
+4. 更新
 
 
 
