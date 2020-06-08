@@ -30,8 +30,8 @@ void MyPlayerTank::Init() {
 	m_iDirect = M_Down;
 	m_iCurFrame = 0;
 
-	m_iSpeedX = 0;
-	m_iSpeedY = 0;
+	m_iSpeedX = 10;
+	m_iSpeedY = 10;
 
 	m_iPosX = 0;
 	m_iPosY = 0;
@@ -40,19 +40,34 @@ void MyPlayerTank::Init() {
 void MyPlayerTank::Update() {
 	m_iCurFrame++;
 	m_iCurFrame %= 2;
+
+	switch (m_iDirect) {
+	case M_Down:
+		m_iPosY += m_iSpeedY;
+		break;
+	case M_Left:
+		m_iPosX -= m_iSpeedX;
+		break;
+	case M_Right:
+		m_iPosX += m_iSpeedX;
+		break;
+	case M_Up:
+		m_iPosY -= m_iSpeedY;
+		break;
+	}
 }
 
-void MyPlayerTank::Draw(CDC* pDC, int x, int y) {
+void MyPlayerTank::Draw(CDC* pDC) {
 	m_dc.CreateCompatibleDC(pDC);
 	m_dc.SelectObject(m_tank[m_iDirect][m_iCurFrame]);
 
 	BITMAP tbm = m_bm[m_iDirect][m_iCurFrame];
-	pDC->StretchBlt(x, y,
+	pDC->TransparentBlt(m_iPosX, m_iPosY,
 		tbm.bmWidth, tbm.bmHeight,
 		&m_dc,
 		0, 0,
 		tbm.bmWidth, tbm.bmHeight,
-		SRCCOPY);
+		RGB(0, 0, 0));
 
 	m_dc.DeleteDC();
 }

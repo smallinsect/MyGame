@@ -25,6 +25,7 @@ void CMyBlast::Update() {
 	m_iCurFrame++;
 	m_iCurFrame %= m_iFrame;
 }
+
 void CMyBlast::Draw(CDC* pDC) {
 	m_dc.CreateCompatibleDC(pDC);
 	m_dc.SelectObject(m_cb[m_iCurFrame]);

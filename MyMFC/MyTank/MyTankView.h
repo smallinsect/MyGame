@@ -22,6 +22,7 @@ public:
 // 操作
 public:
 	void PaintPlayer(int x, int y);
+	void Paint();
 
 // 重写
 public:
@@ -44,14 +45,11 @@ protected:
 	CBitmap m_tank;
 	BITMAP m_bm;
 	CDC m_dc;
-	CPoint m_pos;
-
 
 	CMyRole m_role;
 	MyPlayerTank m_ptank;
 
 	CMyBullet m_bullet;
-	CPoint m_posb;
 
 	CMyBlast m_blast;
 

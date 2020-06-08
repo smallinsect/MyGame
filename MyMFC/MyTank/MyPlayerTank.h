@@ -42,6 +42,6 @@ public:
 
 	void Init();
 	void Update();
-	void Draw(CDC *pDC, int x, int y);
+	void Draw(CDC *pDC);
 };
 

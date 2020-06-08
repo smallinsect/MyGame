@@ -67,11 +67,13 @@ BOOL CMyTankView::PreCreateWindow(CREATESTRUCT& cs)
 	//m_pos.y = 0;
 
 	//m_role.Init(TEXT("./res/walk.bmp"), 0, 0, 4);
+
 	m_ptank.Init();
 	m_bullet.Init();
 	m_blast.Init();
 	m_blast.SetPos(CPoint(100, 100));
 	mciSendString(TEXT("open ./res/music/shoot.wav alias    shoot0"), NULL, 0, NULL);
+
 	//mciSendString(TEXT("play shoot0 from 0"), NULL, 0, NULL);
 
 	return CView::PreCreateWindow(cs);
@@ -161,9 +163,9 @@ void CMyTankView::OnOpenBitmap()
 void CMyTankView::OnPaint()
 {
 	CPaintDC dc(this);
-	CRect rect;
-	GetClientRect(&rect);//获取客户端大小
-	::FillRect(dc.GetSafeHdc(), rect, (HBRUSH)GetStockObject(BLACK_BRUSH));//将客户端区域变成白色
+	//CRect rect;
+	//GetClientRect(&rect);//获取客户端大小
+	//::FillRect(dc.GetSafeHdc(), rect, (HBRUSH)GetStockObject(BLACK_BRUSH));//将客户端区域变成白色
 	
 	//BITMAP bm;
 	//m_tank.GetBitmap(&bm);
@@ -201,7 +203,7 @@ void CMyTankView::OnPaint()
 	//BITMAP bm;
 	//ptank.GetBitmap(&bm);
 
-	CDC* pDC = GetDC();
+	//CDC* pDC = GetDC();
 
 	//CDC mDC;
 	//// 创建兼容内存DC
@@ -217,19 +219,19 @@ void CMyTankView::OnPaint()
 
 	//mDC.DeleteDC();
 
-	m_ptank.Draw(pDC, m_pos.x, m_pos.y);
-	m_ptank.Update();
+	//m_ptank.Draw(pDC, m_pos.x, m_pos.y);
+	//m_ptank.Update();
 
-	// 子弹激活
-	if (m_bullet.GetState()) {
-		m_bullet.Draw(pDC);
-		m_bullet.Update();
-	}
-	
-	m_blast.Draw(pDC);
-	m_blast.Update();
+	//// 子弹激活
+	//if (m_bullet.GetState()) {
+	//	m_bullet.Draw(pDC);
+	//	m_bullet.Update();
+	//}
+	//
+	//m_blast.Draw(pDC);
+	//m_blast.Update();
 
-	ReleaseDC(pDC);
+	//ReleaseDC(pDC);
 }
 
 
@@ -240,7 +242,7 @@ void CMyTankView::OnLButtonDown(UINT nFlags, CPoint point)
 	//pDC->Ellipse(point.x - 5, point.y - 5, point.x + 5, point.y + 5);
 
 	//ReleaseDC(pDC);// 释放DC
-	PaintPlayer(point.x, point.y);
+	//PaintPlayer(point.x, point.y);
 	CView::OnLButtonDown(nFlags, point);
 }
 
@@ -270,6 +272,47 @@ void CMyTankView::PaintPlayer(int x, int y) {
 	//m_dc.DeleteDC();
 
 	//ReleaseDC(pDC);
+}
+
+void CMyTankView::Paint() {
+
+	CDC* pDC = GetDC();
+
+	CRect rect;
+	GetClientRect(&rect);//获取客户端大小
+
+	CDC mDC;
+	mDC.CreateCompatibleDC(pDC);//创建内存兼容DC
+	
+	CBitmap mBmp;
+	mBmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());//创建内存位图
+
+	mDC.SelectObject(&mBmp);//内存兼容DC绑定内存位图	
+	mBmp.DeleteObject();
+
+	CBrush brush(RGB(100, 100, 100));//创建画刷
+
+	mDC.FillRect(rect, &brush);//内存兼容DC绑定画刷
+	brush.DeleteObject();
+
+	//在内存DC上画画
+	m_ptank.Draw(&mDC);
+	
+	if (m_bullet.GetState()) {
+		m_bullet.Draw(&mDC);
+	}
+
+	//m_blast.Draw(&mDC);
+
+	pDC->StretchBlt(0, 0,
+		rect.Width(), rect.Height(),
+		&mDC,
+		0, 0,
+		rect.Width(), rect.Height(), 
+		SRCCOPY);
+
+	mDC.DeleteDC();
+	ReleaseDC(pDC);
 }
 
 void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -311,34 +354,32 @@ void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	//}
 
 	if (nChar == 'W') {
-		m_pos.y -= 5;
 		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Up);
+		m_ptank.Update();
 	}
 	if (nChar == 'S') {
-		m_pos.y += 5;
 		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Down);
+		m_ptank.Update();
 	}
 	if (nChar == 'A') {
-		m_pos.x -= 5;
 		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Left);
+		m_ptank.Update();
 	}
 	if (nChar == 'D') {
-		m_pos.x += 5;
 		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Right);
+		m_ptank.Update();
 	}
 	if (nChar == 'J') {// 发射子弹
-		//m_pos.x += 5;
-		//m_ptank.SetDirection(MyPlayerTank::DIREC::M_Right);
-		m_posb = m_pos;
 		m_bullet.SetDirect(m_ptank.GetDirection());
 		m_bullet.SetSpeed(10, 10);
-		m_bullet.SetPos(m_pos.x + 8, m_pos.y + 8);
+		m_bullet.SetPos(m_ptank.GetPosX() + 8, m_ptank.GetPosY() + 8);
 		m_bullet.SetState(true);
-		SetTimer(1, 30, NULL);
+		SetTimer(1, 1, NULL);//开启定时器
 		//mciSendString(TEXT("close	shoot0"), NULL, 0, NULL);
 		mciSendString(TEXT("play shoot0 from 0"), NULL, 0, NULL);
 	}
-	Invalidate(FALSE);
+	//Invalidate(FALSE);
+	Paint();
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
@@ -356,15 +397,18 @@ void CMyTankView::OnStartWalk()
 	// TODO: 在此添加命令处理程序代码
 	//::SetTimer(NULL, 0, 1000, TimerProc);
 	//关联窗口（常用）
-	::SetTimer(this->m_hWnd, 1, 3000, NULL);//开启定时器
+	//::SetTimer(this->m_hWnd, 1, 2000, NULL);//开启定时器
+	SetTimer(1, 1000, NULL);
 }
 
 
 void CMyTankView::OnStopWalk()
 {
 	// TODO: 在此添加命令处理程序代码
-	::KillTimer(this->m_hWnd, 1);//关闭定时器
+	//::KillTimer(this->m_hWnd, 1);//关闭定时器
+	KillTimer(1);
 }
+
 
 
 void CMyTankView::OnTimer(UINT_PTR nIDEvent)
@@ -372,9 +416,8 @@ void CMyTankView::OnTimer(UINT_PTR nIDEvent)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	switch (nIDEvent) {
 	case 1:
-		Invalidate(FALSE);
-		break;
-	default:
+		m_bullet.Update();
+		Paint();
 		break;
 	}
 	CView::OnTimer(nIDEvent);
