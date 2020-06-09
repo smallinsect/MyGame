@@ -42,19 +42,19 @@
     <ClInclude Include="CMyRole.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyPlayerTank.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CMyDirect.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CMyBullet.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CMyBlast.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CMyEnemyTank.h">
+    <ClInclude Include="CMyEnum.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMyTank.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMyEnemy.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,19 +77,16 @@
     <ClCompile Include="CMyRole.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyPlayerTank.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CMyDirect.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="CMyBullet.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CMyBlast.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CMyEnemyTank.cpp">
+    <ClCompile Include="CMyTank.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CMyEnemy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

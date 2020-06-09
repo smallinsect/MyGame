@@ -4,11 +4,6 @@
 
 #pragma once
 
-#include "CMyRole.h"
-#include "MyPlayerTank.h"
-#include "CMyBullet.h"
-#include "CMyBlast.h"
-
 class CMyTankView : public CView
 {
 protected: // 仅从序列化创建
@@ -47,7 +42,9 @@ protected:
 	CDC m_dc;
 
 	CMyRole m_role;
-	MyPlayerTank m_ptank;
+
+	CMyTank m_ptank;
+	CMyEnemy m_etank;
 
 	CMyBullet m_bullet;
 

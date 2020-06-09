@@ -11,15 +11,12 @@ void CMyRole::Init(LPTSTR name, int iPerFrameWidth, int iPerFrameHeight, int iFr
 	m_role.GetBitmap(&m_bm);
 
 	m_iCurFrame = 0;
-	m_iDirection = DIREC::M_Down;
+	m_iDirection = CMyDirect::M_Down;
 
 	m_iFrameNum = iFrameNum;
 }
 void CMyRole::Update() {
-	m_iCurFrame++;
-	if (m_iCurFrame >= m_iFrameNum) {
-		m_iCurFrame = 0;
-	}
+	m_iCurFrame = (m_iCurFrame + 1) % m_iFrameNum;
 }
 void CMyRole::Draw(CDC* pDC, int x, int y) {
 	m_dc.CreateCompatibleDC(pDC);//¥¥Ω®ª∫¥ÊDC

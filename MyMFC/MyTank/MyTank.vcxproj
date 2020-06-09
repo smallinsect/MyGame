@@ -193,12 +193,12 @@
   <ItemGroup>
     <ClInclude Include="CMyBlast.h" />
     <ClInclude Include="CMyBullet.h" />
-    <ClInclude Include="CMyDirect.h" />
-    <ClInclude Include="CMyEnemyTank.h" />
+    <ClInclude Include="CMyEnemy.h" />
+    <ClInclude Include="CMyEnum.h" />
     <ClInclude Include="CMyRole.h" />
+    <ClInclude Include="CMyTank.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="MyPlayerTank.h" />
     <ClInclude Include="MyTank.h" />
     <ClInclude Include="MyTankDoc.h" />
     <ClInclude Include="MyTankView.h" />
@@ -209,11 +209,10 @@
   <ItemGroup>
     <ClCompile Include="CMyBlast.cpp" />
     <ClCompile Include="CMyBullet.cpp" />
-    <ClCompile Include="CMyDirect.cpp" />
-    <ClCompile Include="CMyEnemyTank.cpp" />
+    <ClCompile Include="CMyEnemy.cpp" />
     <ClCompile Include="CMyRole.cpp" />
+    <ClCompile Include="CMyTank.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="MyPlayerTank.cpp" />
     <ClCompile Include="MyTank.cpp" />
     <ClCompile Include="MyTankDoc.cpp" />
     <ClCompile Include="MyTankView.cpp" />

@@ -9,7 +9,14 @@
 
 // 添加要在此处预编译的标头
 #include "framework.h"
+#include "CMyEnum.h"
 #include <Mmsystem.h>
 #pragma comment ( lib, "Winmm.lib" )
+
+#include "CMyTank.h"
+#include "CMyRole.h"
+#include "CMyBullet.h"
+#include "CMyBlast.h"
+#include "CMyEnemy.h"
 
 #endif //PCH_H

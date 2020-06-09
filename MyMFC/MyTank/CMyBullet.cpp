@@ -16,35 +16,37 @@ void CMyBullet::Init() {//初始化
 		m_cbBullet[i].GetBitmap(&m_bmBullet[i]);// 获取位图大小
 	}
 
-	m_iDirect = 0;
 	m_bState = false;
 
-	m_iPosX = 0;
-	m_iPosY = 0;
+	m_direct = CMyDirect::M_Down;
+	m_speed.x = m_speed.y = 10;
+	m_pos.x = m_pos.y = 0;
 }
 void CMyBullet::Update() {//更新
-	if (m_iDirect == 0) {// 左
-		m_iPosX -= m_iSpeedX;
-	}
-	if (m_iDirect == 1) {
-		m_iPosY -= m_iSpeedY;
-	}
-	if (m_iDirect == 2) {
-		m_iPosX += m_iSpeedX;
-	}
-	if (m_iDirect == 3) {
-		m_iPosY += m_iSpeedY;
+	switch (m_direct) {
+	case CMyDirect::M_Down:
+		m_pos.y += m_speed.y;
+		break;
+	case CMyDirect::M_Left:
+		m_pos.x -= m_speed.x;
+		break;
+	case CMyDirect::M_Right:
+		m_pos.x += m_speed.x;
+		break;
+	case CMyDirect::M_Up:
+		m_pos.y -= m_speed.y;
+		break;
 	}
 }
 void CMyBullet::Draw(CDC* pDC) {
 	m_dc.CreateCompatibleDC(pDC);
-	m_dc.SelectObject(m_cbBullet[m_iDirect]);
+	m_dc.SelectObject(m_cbBullet[m_direct]);
 
-	pDC->StretchBlt(m_iPosX, m_iPosY,
-		m_bmBullet[m_iDirect].bmWidth, m_bmBullet[m_iDirect].bmHeight,
+	pDC->StretchBlt(m_pos.x, m_pos.y,
+		m_bmBullet[m_direct].bmWidth, m_bmBullet[m_direct].bmHeight,
 		&m_dc,
 		0, 0,
-		m_bmBullet[m_iDirect].bmWidth, m_bmBullet[m_iDirect].bmHeight,
+		m_bmBullet[m_direct].bmWidth, m_bmBullet[m_direct].bmHeight,
 		SRCCOPY);
 
 	m_dc.DeleteDC();

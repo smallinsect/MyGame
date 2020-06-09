@@ -3,6 +3,8 @@
 
 
 void CMyBlast::Init() {
+	m_bState = false;
+
 	m_iCurFrame = 0;
 	m_iFrame = 5;
 	m_pos.x = m_pos.y = 0;
@@ -22,20 +24,19 @@ void CMyBlast::Init() {
 
 }
 void CMyBlast::Update() {
-	m_iCurFrame++;
-	m_iCurFrame %= m_iFrame;
+	m_iCurFrame = (m_iCurFrame + 1) % m_iFrame;
 }
 
 void CMyBlast::Draw(CDC* pDC) {
 	m_dc.CreateCompatibleDC(pDC);
 	m_dc.SelectObject(m_cb[m_iCurFrame]);
 
-	pDC->StretchBlt(m_pos.x, m_pos.y,
+	pDC->TransparentBlt(m_pos.x, m_pos.y,
 		m_bm[m_iCurFrame].bmWidth, m_bm[m_iCurFrame].bmHeight,
 		&m_dc,
 		0, 0,
 		m_bm[m_iCurFrame].bmWidth, m_bm[m_iCurFrame].bmHeight,
-		SRCCOPY);
+		RGB(0, 0, 0));
 
 	m_dc.DeleteDC();
 }

@@ -1,8 +1,6 @@
 #include "pch.h"
-#include "MyPlayerTank.h"
-
-
-void MyPlayerTank::Init() {
+#include "CMyTank.h"
+void CMyTank::Init() {
 	TCHAR name[64];
 	HBITMAP hBmp;
 	for (int i = 0; i < 4; i++) {
@@ -27,42 +25,38 @@ void MyPlayerTank::Init() {
 	}
 
 	m_iLevel = 0;
-	m_iDirect = M_Down;
 	m_iCurFrame = 0;
 
-	m_iSpeedX = 10;
-	m_iSpeedY = 10;
-
-	m_iPosX = 0;
-	m_iPosY = 0;
+	m_direct = CMyDirect::M_Down;
+	m_speed.x = m_speed.y = 10;
+	m_pos.x = m_pos.y = 0;
 }
 
-void MyPlayerTank::Update() {
-	m_iCurFrame++;
-	m_iCurFrame %= 2;
+void CMyTank::Update() {
+	m_iCurFrame = (m_iCurFrame + 1) % 2;
 
-	switch (m_iDirect) {
-	case M_Down:
-		m_iPosY += m_iSpeedY;
+	switch (m_direct) {
+	case CMyDirect::M_Down:
+		m_pos.y += m_speed.y;
 		break;
-	case M_Left:
-		m_iPosX -= m_iSpeedX;
+	case CMyDirect::M_Left:
+		m_pos.x -= m_speed.x;
 		break;
-	case M_Right:
-		m_iPosX += m_iSpeedX;
+	case CMyDirect::M_Right:
+		m_pos.x += m_speed.x;
 		break;
-	case M_Up:
-		m_iPosY -= m_iSpeedY;
+	case CMyDirect::M_Up:
+		m_pos.y -= m_speed.y;
 		break;
 	}
 }
 
-void MyPlayerTank::Draw(CDC* pDC) {
+void CMyTank::Draw(CDC* pDC) {
 	m_dc.CreateCompatibleDC(pDC);
-	m_dc.SelectObject(m_tank[m_iDirect][m_iCurFrame]);
+	m_dc.SelectObject(m_tank[m_direct][m_iCurFrame]);
 
-	BITMAP tbm = m_bm[m_iDirect][m_iCurFrame];
-	pDC->TransparentBlt(m_iPosX, m_iPosY,
+	BITMAP tbm = m_bm[m_direct][m_iCurFrame];
+	pDC->TransparentBlt(m_pos.x, m_pos.y,
 		tbm.bmWidth, tbm.bmHeight,
 		&m_dc,
 		0, 0,

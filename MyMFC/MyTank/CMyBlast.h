@@ -1,6 +1,7 @@
 #pragma once
 class CMyBlast{
 private:
+	bool m_bState;//±¬Õ¨×´Ì¬×´Ì¬
 	CPoint m_pos;// ±¬Õ¨×ø±ê
 
 	int m_iCurFrame;// µ±Ç°Ö¡Êý
@@ -16,6 +17,12 @@ public:
 	}
 	void SetPos(CPoint pos) {
 		m_pos = pos;
+	}
+	void SetState(bool bState) {
+		m_bState = bState;
+	}
+	bool GetState() {
+		return m_bState;
 	}
 
 	void Init();

@@ -6,10 +6,6 @@
 class CMyRole{
 
 public:
-	enum DIREC {
-		M_Down = 0, M_Left = 1, M_Right = 2, M_Up = 3
-	};
-
 	int GetPosX() {
 		return m_iPosX;
 	}
@@ -22,7 +18,7 @@ public:
 	void SetSpeedY(int iSpeedY) {
 		m_iSpeedY = iSpeedY;
 	}
-	void SetDirection(DIREC iDirection) {
+	void SetDirection(CMyDirect iDirection) {
 		m_iDirection = iDirection;
 	}
 	void Init(LPTSTR name, int iPerFrameWidth, int iPerFrameHeight, int iFrameNum, int iPosX = 0, int iPosY = 0);
@@ -40,6 +36,6 @@ private:
 	int m_iFrameNum;         //帧数
 	int m_iCurFrame;         //绘制的当前帧
 	// Down-0 Left-1 Right-2 Up-3
-	DIREC m_iDirection;        //移动方向
+	CMyDirect m_iDirection;        //移动方向
 };
 

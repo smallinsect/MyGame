@@ -69,10 +69,17 @@ BOOL CMyTankView::PreCreateWindow(CREATESTRUCT& cs)
 	//m_role.Init(TEXT("./res/walk.bmp"), 0, 0, 4);
 
 	m_ptank.Init();
+	m_etank.Init();
+
+	m_etank.SetPos(CPoint(100, 200));
+
 	m_bullet.Init();
 	m_blast.Init();
-	m_blast.SetPos(CPoint(100, 100));
-	mciSendString(TEXT("open ./res/music/shoot.wav alias    shoot0"), NULL, 0, NULL);
+
+	mciSendString(TEXT("open ./res/music/shoot.wav      alias  shoot0"), NULL, 0, NULL);
+	mciSendString(TEXT("open ./res/music/enemy-bomb.wav alias  bomb"), NULL, 0, NULL);
+
+	
 
 	//mciSendString(TEXT("play shoot0 from 0"), NULL, 0, NULL);
 
@@ -297,9 +304,14 @@ void CMyTankView::Paint() {
 
 	//在内存DC上画画
 	m_ptank.Draw(&mDC);
+	m_etank.Draw(&mDC);
 	
 	if (m_bullet.GetState()) {
 		m_bullet.Draw(&mDC);
+	}
+
+	if (m_blast.GetState()) {
+		m_blast.Draw(&mDC);
 	}
 
 	//m_blast.Draw(&mDC);
@@ -354,25 +366,27 @@ void CMyTankView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	//}
 
 	if (nChar == 'W') {
-		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Up);
+		m_ptank.SetDirect(CMyDirect::M_Up);
 		m_ptank.Update();
 	}
 	if (nChar == 'S') {
-		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Down);
+		m_ptank.SetDirect(CMyDirect::M_Down);
 		m_ptank.Update();
 	}
 	if (nChar == 'A') {
-		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Left);
+		m_ptank.SetDirect(CMyDirect::M_Left);
 		m_ptank.Update();
 	}
 	if (nChar == 'D') {
-		m_ptank.SetDirect(MyPlayerTank::DIREC::M_Right);
+		m_ptank.SetDirect(CMyDirect::M_Right);
 		m_ptank.Update();
 	}
-	if (nChar == 'J') {// 发射子弹
+	if (nChar == 'J' && !m_bullet.GetState()) {// 发射子弹
 		m_bullet.SetDirect(m_ptank.GetDirection());
-		m_bullet.SetSpeed(10, 10);
-		m_bullet.SetPos(m_ptank.GetPosX() + 8, m_ptank.GetPosY() + 8);
+		CPoint pos = m_ptank.GetPos();
+		pos.x += 6;
+		pos.y += 7;
+		m_bullet.SetPos(pos);
 		m_bullet.SetState(true);
 		SetTimer(1, 1, NULL);//开启定时器
 		//mciSendString(TEXT("close	shoot0"), NULL, 0, NULL);
@@ -414,9 +428,49 @@ void CMyTankView::OnStopWalk()
 void CMyTankView::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CRect rect;
+	GetClientRect(&rect);//获取客户端大小
+	CPoint bpos, epos;
+
+	static int iCntBlast = 0;
 	switch (nIDEvent) {
-	case 1:
+	case 1://子弹定时器
 		m_bullet.Update();
+		// 子弹飞出边界，改变状态。
+		bpos = m_bullet.GetPos();
+		if (bpos.x < 0 || rect.Width() <= bpos.x
+			|| bpos.y < 0 || rect.Height() <= bpos.y) {
+			m_bullet.SetState(false);
+		}
+		// 子弹击中坦克，播放爆炸图片。
+		epos = m_etank.GetPos();
+		if (epos.x <= bpos.x && bpos.x <= epos.x + 30 
+			&& epos.y <= bpos.y && bpos.y <= epos.y + 30) {
+
+			if (!m_blast.GetState()) {
+
+				CPoint pos = m_etank.GetPos();
+				pos.x -= 8;
+				pos.y -= 8;
+				m_blast.SetPos(pos);
+				m_blast.SetState(true);
+
+				// 坦克被击中了，复活随机一个位置。
+				m_etank.SetPos(CPoint(rand() % rect.Width(), rand() % rect.Height()));
+				SetTimer(2, 60, NULL);// 开启爆炸定时器
+				iCntBlast = 0;
+				mciSendString(TEXT("play bomb from 0"), NULL, 0, NULL);
+			}
+		}
+		Paint();
+		break;
+	case 2:// 爆炸定时器
+		m_blast.Update();
+		iCntBlast++;
+		if (iCntBlast > 5){
+			m_blast.SetState(false);
+			KillTimer(2);//关闭爆炸定时器
+		}
 		Paint();
 		break;
 	}
