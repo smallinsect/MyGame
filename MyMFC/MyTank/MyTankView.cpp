@@ -78,7 +78,10 @@ BOOL CMyTankView::PreCreateWindow(CREATESTRUCT& cs)
 
 	mciSendString(TEXT("open ./res/music/shoot.wav      alias  shoot0"), NULL, 0, NULL);
 	mciSendString(TEXT("open ./res/music/enemy-bomb.wav alias  bomb"), NULL, 0, NULL);
-
+	//mciSendString(TEXT("open ./res/music/bgm.wav alias  bomb"), NULL, 0, NULL);
+	//循环播放音乐
+	mciSendString(TEXT("open ./res/music/bgm.mp3 alias bkmusic"), NULL, 0, NULL);//背景音乐
+	mciSendString(TEXT("play bkmusic repeat"), NULL, 0, NULL);//循环播放
 	
 
 	//mciSendString(TEXT("play shoot0 from 0"), NULL, 0, NULL);

@@ -158,6 +158,19 @@ void CMySnakeView::OnPaint()
 
 	CDC* pDC = GetDC();
 
+	CRect rect;
+	GetClientRect(&rect);
+
+	CDC mDC;//内存DC
+	mDC.CreateCompatibleDC(pDC);
+
+	//创建内存位图
+	CBitmap mBmp;
+	mBmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
+
+	mDC.SelectObject(&mBmp);//内存DC绑定内存位图
+	mBmp.DeleteObject();//删除内存位图
+
 	CDC memDC;
 	memDC.CreateCompatibleDC(pDC);
 
@@ -165,7 +178,7 @@ void CMySnakeView::OnPaint()
 	// 画背景
 	for (int x = 0; x < m_iWidth; x++) {
 		for (int y = 0; y < m_iHeight; y++) {
-			pDC->StretchBlt(x * m_bmWhite.bmWidth, y * m_bmWhite.bmHeight,
+			mDC.StretchBlt(x * m_bmWhite.bmWidth, y * m_bmWhite.bmHeight,
 				m_bmWhite.bmWidth, m_bmWhite.bmHeight,
 				&memDC,
 				0, 0,
@@ -177,7 +190,7 @@ void CMySnakeView::OnPaint()
 	memDC.SelectObject(m_cbmRed);
 	// 画蛇
 	for (int i = 0; i < m_iNum; i++) {
-		pDC->StretchBlt(m_snake[i].x * m_bmRed.bmWidth, m_snake[i].y * m_bmRed.bmHeight,
+		mDC.StretchBlt(m_snake[i].x * m_bmRed.bmWidth, m_snake[i].y * m_bmRed.bmHeight,
 			m_bmRed.bmWidth, m_bmRed.bmHeight,
 			&memDC,
 			0, 0,
@@ -187,7 +200,7 @@ void CMySnakeView::OnPaint()
 
 	memDC.SelectObject(m_cbmGreen);
 	//画食物
-	pDC->StretchBlt(m_food.x * m_bmGreen.bmWidth, m_food.y * m_bmGreen.bmHeight,
+	mDC.StretchBlt(m_food.x * m_bmGreen.bmWidth, m_food.y * m_bmGreen.bmHeight,
 		m_bmGreen.bmWidth, m_bmGreen.bmHeight,
 		&memDC,
 		0, 0,
@@ -195,6 +208,15 @@ void CMySnakeView::OnPaint()
 		SRCCOPY);
 
 	memDC.DeleteDC();
+
+	pDC->StretchBlt(0, 0,
+		rect.Width(), rect.Height(),
+		&mDC,
+		0, 0,
+		rect.Width(), rect.Height(),
+		SRCCOPY);
+
+	mDC.DeleteDC();
 
 	ReleaseDC(pDC);
 }
