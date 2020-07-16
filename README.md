@@ -44,7 +44,9 @@ gdb ./server
 r启动调试
 ```
 
+cocos游戏样例
 
+- https://github.com/cocos2d/cocos2d-x-samples
 
 
 
