@@ -8,3 +8,6 @@ VS2017/.vs
 MyMFC/.vs
 WinAPI/.vs
 
+CppDemo/.vs
+CppDemo/bin
+CppDemo/bintemp
