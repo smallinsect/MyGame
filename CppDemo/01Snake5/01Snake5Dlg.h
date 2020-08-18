@@ -32,6 +32,9 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
+public:
+	void Tick();
+
 private:
 	enum DRICT {
 		M_Up = 0, M_Down, M_Left, M_Right
@@ -52,4 +55,10 @@ private:
 	CPoint m_snake[100];
 
 	CPoint m_food;//食物的坐标
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnStartGame();
+	afx_msg void OnStopGame();
+	afx_msg void OnEndGame();
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
