@@ -4,22 +4,24 @@
 #include <stdlib.h>
 #include <windows.h>
 
-const int W = 40;// 屏幕宽度
+const int W = 10;// 屏幕宽度
 const int H = 20;// 屏幕高度
 int canvas[H][W];
 
-// 蛇的方向，蛇的长度
-int dir = 2, num = 4;
-// 蛇的身体坐标
-struct Snake {
+struct Point {
 	int x, y;
-} s[100];
+} a[4], b[4];
 
-struct Food {
-	int x, y;
-} f;
+int figures[7][4] = {
+	1,3,5,7, // I
+	2,4,5,7, // Z
+	3,5,4,6, // S
+	3,5,4,7, // T
+	2,3,5,7, // L
+	3,5,7,6, // J
+	2,3,4,5, // O
+};
 
-void Tick();
 void gotoxy(SHORT x, SHORT y);
 void HideCursor();// 隐藏光标
 
@@ -29,9 +31,14 @@ int main(int argc, char* argv[]) {
 
 	memset(canvas, 0, sizeof(canvas));
 
-	f.x = rand() % W;
-	f.y = rand() % H;
+	int n = rand() % 7;
+	for (int i = 0; i < 4; i++) {
+		a[i].x = figures[n][i] % 2;
+		a[i].y = figures[n][i] / 2;
+	}
 
+	int dx = 0;
+	bool rotate = false;
 	clock_t timer = clock(), delay = 50;
 	while (true) {
 		clock_t nowTime = clock();
@@ -42,9 +49,6 @@ int main(int argc, char* argv[]) {
 			for (int j = 0; j < W; j++) {
 				if (canvas[i][j] == 1) {// 蛇
 					printf("*");
-				}
-				else if (canvas[i][j] == 2) {// 食物
-					printf("@");
 				}
 				else {// 空白
 					printf(" ");
@@ -57,55 +61,56 @@ int main(int argc, char* argv[]) {
 		}
 		printf("+\n");
 
+		dx = 0;
+		rotate = false;
+		delay = 100;
 		// 检测键盘输入
 		if (_kbhit()) {
 			char ch = _getch();
-			if (ch == 'w') dir = 0;// 上
-			if (ch == 'd') dir = 1;// 右
-			if (ch == 's') dir = 2;// 下
-			if (ch == 'a') dir = 3;// 左
+			if (ch == 'w') rotate = true;// 上
+			if (ch == 'd') dx = 1;// 右
+			if (ch == 's') delay = 50;// 下
+			if (ch == 'a') dx = -1;// 左
+		}
+
+		// 移动
+		for (int i = 0; i < 4; i++) {
+			canvas[a[i].y][a[i].x] = 0;// 重置原来位置的值
+			b[i] = a[i];
+			a[i].x += dx;
+		}
+		// 旋转
+		if (rotate) {
+			Point p = a[1];
+			for (int i = 0; i < 4; i++) {
+				canvas[a[i].y][a[i].x] = 0;// 重置原来位置的值
+				int x = a[i].y - p.y;
+				int y = a[i].x - p.x;
+				a[i].x = p.x - x;
+				a[i].y = p.y + y;
+			}
 		}
 
 		// 定时器
 		clock_t subTime = nowTime - timer;
 		if (subTime > delay) {
 			timer = nowTime;
-			Tick();
+			// 下落
+			for (int i = 0; i < 4; i++) {
+				canvas[a[i].y][a[i].x] = 0;// 重置原来位置的值
+				b[i] = a[i];
+				a[i].y += 1;
+			}
 		}
 
-		// 重置画布
-		memset(canvas, 0, sizeof(canvas));
-		// 将蛇贴在画布上
-		for (int i = 0; i < num; i++) {
-			canvas[s[i].y][s[i].x] = 1;
+		for (int i = 0; i < 4; i++) {
+			canvas[a[i].y][a[i].x] = 1;
 		}
-		// 将食物贴在画布上
-		canvas[f.y][f.x] = 2;
 	}
 
 	return 0;
 }
 
-void Tick() {
-	for (int i = num; i > 0; i--) {
-		s[i] = s[i - 1];
-	}
-	if (dir == 0) s[0].y -= 1;// 上
-	if (dir == 1) s[0].x += 1;// 右
-	if (dir == 2) s[0].y += 1;// 下
-	if (dir == 3) s[0].x -= 1;// 左
-	// 越界处理
-	s[0].x = (s[0].x + W) % W;
-	s[0].y = (s[0].y + H) % H;
-	// 吃食物
-	if (s[0].x == f.x && s[0].y == f.y) {
-		// 增加蛇的长度
-		num++;
-		// 随机新的食物坐标
-		f.x = rand() % W;
-		f.y = rand() % H;
-	}
-}
 
 // 设置光标位置
 void gotoxy(SHORT x, SHORT y) {
