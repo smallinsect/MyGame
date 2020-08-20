@@ -65,6 +65,11 @@ BEGIN_MESSAGE_MAP(CMy02Tetris5Dlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_COMMAND(ID_32771, &CMy02Tetris5Dlg::OnStartGame)
+	ON_WM_KEYDOWN()
+	ON_WM_TIMER()
+	ON_COMMAND(ID_32772, &CMy02Tetris5Dlg::OnStopGame)
+	ON_COMMAND(ID_32773, &CMy02Tetris5Dlg::OnEndGame)
 END_MESSAGE_MAP()
 
 
@@ -100,6 +105,12 @@ BOOL CMy02Tetris5Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	HBITMAP hbmp = (HBITMAP)LoadImage(NULL, TEXT("./res/tiles.bmp"), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	if (hbmp == NULL) {
+		MessageBox(TEXT("加载图片失败"));
+	}
+	m_block.Attach(hbmp);
+	m_block.GetBitmap(&m_bmBlock);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -123,27 +134,23 @@ void CMy02Tetris5Dlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CMy02Tetris5Dlg::OnPaint()
 {
-	if (IsIconic())
-	{
-		CPaintDC dc(this); // 用于绘制的设备上下文
+	CPaintDC dc(this); // 用于绘制的设备上下文
 
-		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+	CDC* pDC = GetDC();
 
-		// 使图标在工作区矩形中居中
-		int cxIcon = GetSystemMetrics(SM_CXICON);
-		int cyIcon = GetSystemMetrics(SM_CYICON);
-		CRect rect;
-		GetClientRect(&rect);
-		int x = (rect.Width() - cxIcon + 1) / 2;
-		int y = (rect.Height() - cyIcon + 1) / 2;
+	CDC memDC;
+	memDC.CreateCompatibleDC(pDC);
+	memDC.SelectObject(m_block);
 
-		// 绘制图标
-		dc.DrawIcon(x, y, m_hIcon);
-	}
-	else
-	{
-		CDialogEx::OnPaint();
-	}
+	pDC->StretchBlt(
+		0, 0, m_bmBlock.bmWidth, m_bmBlock.bmHeight,
+		&memDC,
+		0, 0, m_bmBlock.bmWidth, m_bmBlock.bmHeight,
+		SRCCOPY);
+
+	memDC.DeleteDC();
+
+	ReleaseDC(pDC);
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
@@ -153,3 +160,50 @@ HCURSOR CMy02Tetris5Dlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CMy02Tetris5Dlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (nChar == 'W') {// 上 旋转
+	}
+	if (nChar == 'D') {// 右
+	}
+	if (nChar == 'S') {// 下
+	}
+	if (nChar == 'A') {// 左
+	}
+	CDialogEx::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+
+void CMy02Tetris5Dlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	switch (nIDEvent) {
+	case 1:
+		break;
+	default:
+		break;
+	}
+	CDialogEx::OnTimer(nIDEvent);
+}
+
+void CMy02Tetris5Dlg::OnStartGame()
+{
+	// TODO: 在此添加命令处理程序代码
+	SetTimer(1, 300, NULL);
+}
+
+
+void CMy02Tetris5Dlg::OnStopGame()
+{
+	// TODO: 在此添加命令处理程序代码
+	KillTimer(1);
+}
+
+
+void CMy02Tetris5Dlg::OnEndGame()
+{
+	// TODO: 在此添加命令处理程序代码
+	KillTimer(1);
+}

@@ -31,4 +31,14 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnStartGame();
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnStopGame();
+	afx_msg void OnEndGame();
+
+private:
+	CBitmap m_block;
+	BITMAP m_bmBlock;
 };
