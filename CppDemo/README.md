@@ -17,6 +17,8 @@
 - 02Tetris1 俄罗斯方块 控制台
 - 02Tetris5 俄罗斯方块 MFC模态窗口
 - 03Tank5 红白机坦克大战 MFC模态窗口
+- 04Plane1 飞机游戏 控制台
+- 04Plane5 飞机游戏 MFC模态窗口
 
 
 

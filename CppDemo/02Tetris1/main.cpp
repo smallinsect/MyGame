@@ -54,12 +54,12 @@ int main(int argc, char* argv[]) {
 			for (int j = 0; j < W; j++) {
 				printf("%c", symbol[canvas[i][j]]);
 			}
-			printf("|\n");
+			printf("#\n");
 		}
 		for (int i = 0; i < W; i++) {
-			printf("-");
+			printf("#");
 		}
-		printf("+\n");
+		printf("#\n");
 
 		dx = 0;
 		rotate = false;

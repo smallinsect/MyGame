@@ -50,12 +50,12 @@ int main(int argc, char* argv[]) {
 					printf(" ");
 				}
 			}
-			printf("|\n");
+			printf("#\n");
 		}
 		for (int i = 0; i < W; i++) {
-			printf("-");
+			printf("#");
 		}
-		printf("+\n");
+		printf("#\n");
 
 		// ¼ì²â¼üÅÌÊäÈë
 		if (_kbhit()) {
