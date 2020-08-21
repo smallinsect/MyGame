@@ -4,6 +4,8 @@
 
 #pragma once
 
+#define W 10
+#define H 20
 
 // CMy02Tetris5Dlg 对话框
 class CMy02Tetris5Dlg : public CDialogEx
@@ -41,4 +43,15 @@ public:
 private:
 	CBitmap m_block;
 	BITMAP m_bmBlock;
+
+	int m_iSize;// 方块大小
+	CPoint a[4];//下落的方块
+
+	int canvas[H][W];
+	int dx;// 移动方向
+	bool rotate;// 旋转
+	int color;// 方块颜色
+
+public:
+	bool Check();
 };

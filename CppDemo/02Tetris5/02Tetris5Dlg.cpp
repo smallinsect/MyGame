@@ -48,6 +48,16 @@ END_MESSAGE_MAP()
 
 // CMy02Tetris5Dlg 对话框
 
+int figures[7][4] = {
+	1,3,5,7, // I
+	2,4,5,7, // Z
+	3,5,4,6, // S
+	3,5,4,7, // T
+	2,3,5,7, // L
+	3,5,7,6, // J
+	2,3,4,5, // O
+};
+
 
 
 CMy02Tetris5Dlg::CMy02Tetris5Dlg(CWnd* pParent /*=nullptr*/)
@@ -112,6 +122,18 @@ BOOL CMy02Tetris5Dlg::OnInitDialog()
 	m_block.Attach(hbmp);
 	m_block.GetBitmap(&m_bmBlock);
 
+	m_iSize = 9;// 方块大小
+	// 设置随机种子
+	srand((unsigned int)time(NULL));
+
+	color = rand() % 8;// 随机一种方块颜色
+	int n = rand() % 7;// 随机7中方块种的一种
+	for (int i = 0; i < 4; i++) {
+		a[i].x = figures[n][i] % 2;
+		a[i].y = figures[n][i] / 2;
+	}
+	// 初始化画布
+	memset(canvas, 0, sizeof(canvas));
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -142,11 +164,25 @@ void CMy02Tetris5Dlg::OnPaint()
 	memDC.CreateCompatibleDC(pDC);
 	memDC.SelectObject(m_block);
 
-	pDC->StretchBlt(
-		0, 0, m_bmBlock.bmWidth, m_bmBlock.bmHeight,
-		&memDC,
-		0, 0, m_bmBlock.bmWidth, m_bmBlock.bmHeight,
-		SRCCOPY);
+	for (int i = 0; i < 4; i++) {
+		pDC->StretchBlt(
+			a[i].x * m_iSize, a[i].y * m_iSize, m_iSize, m_iSize,
+			&memDC,
+			color * m_iSize, 0, m_iSize, m_iSize,
+			SRCCOPY);
+	}
+	for (int i = 0; i < H; i++) {
+		for (int j = 0; j < W; j++) {
+			int k = canvas[i][j];
+			if (k > 0) {
+				pDC->StretchBlt(
+					j * m_iSize, i * m_iSize, m_iSize, m_iSize,
+					&memDC,
+					k * m_iSize, 0, m_iSize, m_iSize,
+					SRCCOPY);
+			}
+		}
+	}
 
 	memDC.DeleteDC();
 
@@ -164,14 +200,45 @@ HCURSOR CMy02Tetris5Dlg::OnQueryDragIcon()
 void CMy02Tetris5Dlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CPoint b[4];
+	dx = 0;
+	rotate = false;
 	if (nChar == 'W') {// 上 旋转
+		rotate = true;
 	}
 	if (nChar == 'D') {// 右
+		dx = 1;
 	}
 	if (nChar == 'S') {// 下
 	}
 	if (nChar == 'A') {// 左
+		dx = -1;
 	}
+	for (int i = 0; i < 4; i++) {
+		b[i] = a[i];
+		a[i].x += dx;
+	}
+	if (!Check()) {
+		for (int i = 0; i < 4; i++) {
+			a[i] = b[i];
+		}
+	}
+	if (rotate) {
+		CPoint p = a[1];
+		for (int i = 0; i < 4; i++) {
+			b[i] = a[i];
+			int x = a[i].y - p.y;
+			int y = a[i].x - p.x;
+			a[i].x = p.x - x;
+			a[i].y = p.y + y;
+		}
+		if (!Check()) {
+			for (int i = 0; i < 4; i++) {
+				a[i] = b[i];
+			}
+		}
+	}
+	Invalidate(TRUE);
 	CDialogEx::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
@@ -179,9 +246,47 @@ void CMy02Tetris5Dlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CMy02Tetris5Dlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CPoint b[4];
 	switch (nIDEvent) {
 	case 1:
+	{
+		// 下落
+		for (int i = 0; i < 4; i++) {
+			b[i] = a[i];
+			a[i].y += 1;
+		}
+		if (!Check()) {
+			for (int i = 0; i < 4; i++) {
+				canvas[b[i].y][b[i].x] = color;
+			}
+			// 重新随机方块颜色
+			color = rand() % 8;
+			// 重新随机方块种类
+			int n = rand() % 7;
+			for (int i = 0; i < 4; i++) {
+				a[i].x = figures[n][i] % 2;
+				a[i].y = figures[n][i] / 2;
+			}
+		}
+		Invalidate(TRUE);
+		// 消去满行
+		int k = H - 1;
+		for (int i = H - 1; i >= 0; i--) {
+			int cnt = 0;
+			// 统计一行的方块数量
+			for (int j = 0; j < W; j++) {
+				if (canvas[i][j] > 0) {
+					cnt++;
+				}
+				canvas[k][j] = canvas[i][j];
+			}
+			if (cnt < W) {
+				k--;
+			}
+		}
+		Invalidate(TRUE);
 		break;
+	}
 	default:
 		break;
 	}
@@ -206,4 +311,16 @@ void CMy02Tetris5Dlg::OnEndGame()
 {
 	// TODO: 在此添加命令处理程序代码
 	KillTimer(1);
+}
+
+bool CMy02Tetris5Dlg::Check() {
+	for (int i = 0; i < 4; i++) {
+		if (a[i].x < 0 || W <= a[i].x || a[i].y < 0 || H <= a[i].y) {
+			return false;
+		}
+		if (canvas[a[i].y][a[i].x] > 0) {
+			return false;
+		}
+	}
+	return true;
 }
