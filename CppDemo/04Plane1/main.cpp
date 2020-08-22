@@ -7,7 +7,7 @@
 
 #define H 26//游戏画面尺寸
 #define W 40
-#define EnemyNum 5//敌机数量
+#define EnemyNum 15//敌机数量
 
 //画布
 int canvas[H][W] = { 0 };
@@ -17,11 +17,15 @@ int canvas[H][W] = { 0 };
 //3.输出敌机
 char symbol[] = " *|@";
 
+struct Point {
+	int x, y;
+};
 
-int position_x, position_y;//飞机坐标位置
-int hero_x[2], hero_y[2];// 飞机的附机
-int enemy_x[EnemyNum], enemy_y[EnemyNum];//敌机坐标
-int score;//游戏得分
+Point player;//飞机坐标位置
+Point enemy[EnemyNum];//敌机坐标
+int score = 0;//游戏得分
+// 定时器，敌机下落速度
+int timer = 0, delay = 10;
 
 void gotoxy(SHORT x, SHORT y) {
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -40,24 +44,15 @@ void startup() {
 	srand((unsigned int)time(NULL));//设置随机种子
 	HideCursor();//隐藏光标
 
-	position_x = H / 2;//飞机坐标位置
-	position_y = W / 2;
+	player.x = H / 2;//飞机坐标位置
+	player.y = W / 2;
+	canvas[player.x][player.y] = 1;
 
-	hero_x[0] = position_x;// 左附机
-	hero_y[0] = position_y - 1;
-
-	canvas[position_x][position_y] = 1;
-	canvas[hero_x[0]][hero_y[0]] = 4;
-	canvas[hero_x[1]][hero_y[1]] = 4;
-
-	int i;
 	// 初始化，随机敌机位置。
-	for (i = 0; i < EnemyNum; i++) {
-		enemy_x[i] = rand() % 3;
-		enemy_y[i] = rand() % W;
+	for (int i = 0; i < EnemyNum; i++) {
+		enemy[i].x = rand() % 3;
+		enemy[i].y = rand() % W;
 	}
-	// 初始化分数
-	score = 0;
 }
 //显示画面
 void show() {
@@ -82,121 +77,70 @@ void updateWithoutInput() {
 	//子弹上跑
 	for (i = 0; i < H; i++) {
 		for (j = 0; j < W; j++) {
-			if (canvas[i][j] == 2 || canvas[i][j] == 5) {
-				int bullet = canvas[i][j];
+			if (canvas[i][j] == 2) {
+				canvas[i][j] = 0;
+				if (i == 0) {
+					continue;
+				}
+				bool flag = true;
 				//子弹击中敌机
 				for (k = 0; k < EnemyNum; k++) {
-					if (i == enemy_x[k] && j == enemy_y[k]) {
-						score++;
-
-						canvas[enemy_x[k]][enemy_y[k]] = 0;
-						enemy_x[k] = 0;
-						enemy_y[k] = rand() % W;
-						canvas[enemy_x[k]][enemy_y[k]] = 3;
+					if (i-1 == enemy[k].x && j == enemy[k].y) {// 子弹命中敌机
+						score++;// 加分
+						canvas[enemy[k].x][enemy[k].y] = 0;// 删除敌机
+						enemy[k].x = 0;
+						enemy[k].y = rand() % W;
+						canvas[enemy[k].x][enemy[k].y] = 3;
+						flag = false;// 子弹击中敌机，消除子弹。
 					}
 				}
-
-				canvas[i][j] = 0;
-				if (i > 0) {
-					canvas[i - 1][j] = bullet;
+				if (flag) {
+					canvas[i - 1][j] = 2;
 				}
 			}
 		}
 	}
 
-	for (k = 0; k < EnemyNum; k++) {
-		if (enemy_x[k] + 1 >= H) {
-			canvas[enemy_x[k]][enemy_y[k]] = 0;
-			enemy_x[k] = 0;
-			enemy_y[k] = rand() % W;
-			canvas[enemy_x[k]][enemy_y[k]] = 3;
-			score--;
-		}
-	}
-	static int speed = 0;
-	if (speed < 10) {
-		speed++;
-	}
-	else {
-		speed = 0;
+	timer++;
+	if(timer > delay){
+		timer = 0;
+		//敌机下落
 		for (k = 0; k < EnemyNum; k++) {
-			//敌机下落
-			canvas[enemy_x[k]][enemy_y[k]] = 0;
-			enemy_x[k]++;
-			canvas[enemy_x[k]][enemy_y[k]] = 3;
+			canvas[enemy[k].x][enemy[k].y] = 0;
+			enemy[k].x++;
+			if (enemy[k].x >= H) {
+				enemy[k].x = 0;
+				enemy[k].y = rand() % W;
+				score--;
+			}
+			canvas[enemy[k].x][enemy[k].y] = 3;
 		}
 	}
 }
 //与用户输入有关的更新
 void updateWithInput() {
-	if (GetAsyncKeyState(0x41) & 0x8000 && position_y - 1 >= 0) { // a 左移
-		canvas[hero_x[0]][hero_y[0]] = 0;
-		canvas[hero_x[1]][hero_y[1]] = 0;
-		canvas[position_x][position_y] = 0;
-
-		position_y--;
-		hero_x[0] = position_x;// 左附机
-		hero_y[0] = position_y - 1;
-
-		hero_x[1] = position_x;// 右附机
-		hero_y[1] = position_y + 1;
-
-		canvas[position_x][position_y] = 1;
-		canvas[hero_x[0]][hero_y[0]] = 4;
-		canvas[hero_x[1]][hero_y[1]] = 4;
+	if (GetAsyncKeyState('A') & 0x8000 && player.y - 1 >= 0) { // a 左移
+		canvas[player.x][player.y] = 0;
+		player.y--;
+		canvas[player.x][player.y] = 1;
 	}
-	if (GetAsyncKeyState(0x44) & 0x8000 && position_y + 1 < W) { // d 右移
-		canvas[hero_x[0]][hero_y[0]] = 0;
-		canvas[hero_x[1]][hero_y[1]] = 0;
-		canvas[position_x][position_y] = 0;
-
-		position_y++;
-		hero_x[0] = position_x;// 左附机
-		hero_y[0] = position_y - 1;
-
-		hero_x[1] = position_x;// 右附机
-		hero_y[1] = position_y + 1;
-
-		canvas[position_x][position_y] = 1;
-		canvas[hero_x[0]][hero_y[0]] = 4;
-		canvas[hero_x[1]][hero_y[1]] = 4;
+	if (GetAsyncKeyState('D') & 0x8000 && player.y + 1 < W) { // d 右移
+		canvas[player.x][player.y] = 0;
+		player.y++;
+		canvas[player.x][player.y] = 1;
 	}
-	if (GetAsyncKeyState(0x57) & 0x8000 && position_x - 1 >= 0) { // w 上移
-		canvas[hero_x[0]][hero_y[0]] = 0;
-		canvas[hero_x[1]][hero_y[1]] = 0;
-		canvas[position_x][position_y] = 0;
-
-		position_x--;
-		hero_x[0] = position_x;// 左附
-		hero_y[0] = position_y - 1;
-
-		hero_x[1] = position_x;// 右附机
-		hero_y[1] = position_y + 1;
-
-		canvas[position_x][position_y] = 1;
-		canvas[hero_x[0]][hero_y[0]] = 4;
-		canvas[hero_x[1]][hero_y[1]] = 4;
+	if (GetAsyncKeyState('W') & 0x8000 && player.x - 1 >= 0) { // w 上移
+		canvas[player.x][player.y] = 0;
+		player.x--;
+		canvas[player.x][player.y] = 1;
 	}
-	if (GetAsyncKeyState(0x53) & 0x8000 && position_x + 1 < H) { // s 下移
-		canvas[hero_x[0]][hero_y[0]] = 0;
-		canvas[hero_x[1]][hero_y[1]] = 0;
-		canvas[position_x][position_y] = 0;
-
-		position_x++;
-		hero_x[0] = position_x;// 左附机
-		hero_y[0] = position_y - 1;
-
-		hero_x[1] = position_x;// 右附机
-		hero_y[1] = position_y + 1;
-
-		canvas[position_x][position_y] = 1;
-		canvas[hero_x[0]][hero_y[0]] = 4;
-		canvas[hero_x[1]][hero_y[1]] = 4;
+	if (GetAsyncKeyState('S') & 0x8000 && player.x + 1 < H) { // s 下移
+		canvas[player.x][player.y] = 0;
+		player.x++;
+		canvas[player.x][player.y] = 1;
 	}
 	if (GetAsyncKeyState(' ') & 0x8000) { // 空格 发射子弹
-		canvas[position_x - 1][position_y] = 2;
-		canvas[hero_x[0] - 1][hero_y[0]] = 2;
-		canvas[hero_x[1] - 1][hero_y[1]] = 2;
+		canvas[player.x - 1][player.y] = 2;
 	}
 }
 
@@ -207,6 +151,5 @@ int main() {
 		updateWithoutInput();//于用户输入无关的更新
 		updateWithInput();//与用户输入有关的更新
 	}
-
 	return 0;
 }
