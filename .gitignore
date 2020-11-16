@@ -8,6 +8,9 @@ VS2017/.vs
 MyMFC/.vs
 WinAPI/.vs
 
+GameServer/.vs
+GameTank/.vs
+
 CppDemo/.vs
 CppDemo/bin
 CppDemo/bintemp
