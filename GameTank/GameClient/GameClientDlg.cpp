@@ -12,6 +12,7 @@
 #define new DEBUG_NEW
 #endif
 
+#define TIMER_TANK_MOVE 1
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -65,6 +66,11 @@ BEGIN_MESSAGE_MAP(CGameClientDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_COMMAND(ID_START, &CGameClientDlg::OnStart)
+	ON_WM_TIMER()
+	ON_COMMAND(ID_STOP, &CGameClientDlg::OnStop)
+	ON_COMMAND(ID_END, &CGameClientDlg::OnEnd)
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 
@@ -100,7 +106,19 @@ BOOL CGameClientDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	GdiplusStartupInput gdiplusStartupInput;
+	ULONG_PTR           gdiplusToken;
+	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
+	graphics = Graphics::FromHWND(m_hWnd);
+	if (graphics->GetLastStatus() != Ok) {
+		AfxMessageBox(TEXT("GDI+失败..."));
+		return FALSE;
+	}
+	// 初始化玩家坦克
+	player.Init();
+	// 初始化背景颜色
+	m_bg = Color(0, 0, 0);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -153,3 +171,67 @@ HCURSOR CGameClientDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CGameClientDlg::Draw() {
+	graphics->Clear(m_bg);
+	
+	player.Draw(graphics);
+}
+
+void CGameClientDlg::OnStart()
+{
+	// TODO: 在此添加命令处理程序代码
+	SetTimer(TIMER_TANK_MOVE, 30, NULL);
+}
+
+void CGameClientDlg::OnStop()
+{
+	// TODO: 在此添加命令处理程序代码
+	KillTimer(TIMER_TANK_MOVE);
+}
+
+
+void CGameClientDlg::OnEnd()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CGameClientDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	switch (nIDEvent) {
+	case TIMER_TANK_MOVE:
+		player.Move();
+		Draw();
+		break;
+	}
+	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+
+void CGameClientDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	switch (nChar) {
+	case 'W'://上
+		player.SetDire(TANK_UP);
+		player.Move();
+		break;
+	case 'S'://下
+		player.SetDire(TANK_DOWN);
+		player.Move();
+		break;
+	case 'A'://左
+		player.SetDire(TANK_LEFT);
+		player.Move();
+		break;
+	case 'D'://右
+		player.SetDire(TANK_RIGHT);
+		player.Move();
+		break;
+	}
+	Draw();
+	CDialogEx::OnKeyDown(nChar, nRepCnt, nFlags);
+}

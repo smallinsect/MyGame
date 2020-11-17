@@ -10,4 +10,17 @@
 // 添加要在此处预编译的标头
 #include "framework.h"
 
+#include "gdiplus.h"
+#pragma comment( lib, "gdiplus.lib" )
+using namespace Gdiplus;
+
+#include "MyTank.h"
+
+enum TANK_DIRE {//坦克方向
+	TANK_LEFT = 0, // 左
+	TANK_UP = 1,   // 上
+	TANK_RIGHT = 2,// 右
+	TANK_DOWN = 3, // 下
+};
+
 #endif //PCH_H
