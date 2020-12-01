@@ -23,4 +23,7 @@ enum TANK_DIRE {//坦克方向
 	TANK_DOWN = 3, // 下
 };
 
+enum TANK_TYPE {//坦克种类
+};
+
 #endif //PCH_H
