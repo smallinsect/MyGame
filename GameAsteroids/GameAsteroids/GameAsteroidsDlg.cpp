@@ -1,20 +1,18 @@
 ﻿
-// GameSnakeDlg.cpp: 实现文件
+// GameAsteroidsDlg.cpp: 实现文件
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "GameSnake.h"
-#include "GameSnakeDlg.h"
+#include "GameAsteroids.h"
+#include "GameAsteroidsDlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-#define TIMER_MOVE 1
-#define UNIN_W 16
-#define UNIN_H 16
+#define TIMER_TYPE_A 1
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -49,35 +47,34 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CGameSnakeDlg 对话框
+// CGameAsteroidsDlg 对话框
 
 
 
-CGameSnakeDlg::CGameSnakeDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_GAMESNAKE_DIALOG, pParent)
+CGameAsteroidsDlg::CGameAsteroidsDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_GAMEASTEROIDS_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CGameSnakeDlg::DoDataExchange(CDataExchange* pDX)
+void CGameAsteroidsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CGameSnakeDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CGameAsteroidsDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_COMMAND(ID_START, &CGameSnakeDlg::OnStart)
-	ON_COMMAND(ID_STOP, &CGameSnakeDlg::OnStop)
-	ON_COMMAND(ID_END, &CGameSnakeDlg::OnEnd)
+	ON_COMMAND(ID_START, &CGameAsteroidsDlg::OnStart)
+	ON_COMMAND(ID_STOP, &CGameAsteroidsDlg::OnStop)
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
-// CGameSnakeDlg 消息处理程序
+// CGameAsteroidsDlg 消息处理程序
 
-BOOL CGameSnakeDlg::OnInitDialog()
+BOOL CGameAsteroidsDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -111,33 +108,10 @@ BOOL CGameSnakeDlg::OnInitDialog()
 	ULONG_PTR           gdiplusToken;
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-	graphics = Graphics::FromHWND(m_hWnd);
-	if (graphics->GetLastStatus() != Ok) {
-		AfxMessageBox(TEXT("GDI+失败..."));
-		return FALSE;
-	}
-
-	red = Image::FromFile(TEXT("./res/red.png"));
-	if (red->GetLastStatus() != Ok) {
-		AfxMessageBox(TEXT("打开red.png失败..."));
-		return FALSE;
-	}
-	green = Image::FromFile(TEXT("./res/green.png"));
-	if (green->GetLastStatus() != Ok) {
-		AfxMessageBox(TEXT("打开green.png失败..."));
-		return FALSE;
-	}
-	white = Image::FromFile(TEXT("./res/white.png"));
-	if (white->GetLastStatus() != Ok) {
-		AfxMessageBox(TEXT("打开white.png失败..."));
-		return FALSE;
-	}
-	width = 30;
-	height = 40;
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CGameSnakeDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CGameAsteroidsDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -154,8 +128,14 @@ void CGameSnakeDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CGameSnakeDlg::OnPaint()
+void CGameAsteroidsDlg::OnPaint()
 {
+	Image bg(TEXT("images/background.jpg"));
+	Image type_A(TEXT("images/explosions/type_A.png"));
+	Graphics graphics(m_hWnd);
+	graphics.DrawImage(&bg, 0, 0);
+	graphics.DrawImage(&type_A, 100, 100, m_x*50, 0, 50, 50, UnitPixel);
+	
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // 用于绘制的设备上下文
@@ -181,49 +161,40 @@ void CGameSnakeDlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CGameSnakeDlg::OnQueryDragIcon()
+HCURSOR CGameAsteroidsDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
 
-void CGameSnakeDlg::OnStart()
+void CGameAsteroidsDlg::OnStart()
 {
 	// TODO: 在此添加命令处理程序代码
-	SetTimer(TIMER_MOVE, 100, NULL);
+	m_x = 0;
+	SetTimer(TIMER_TYPE_A, 30, NULL);
 }
 
 
-void CGameSnakeDlg::OnStop()
+void CGameAsteroidsDlg::OnStop()
 {
 	// TODO: 在此添加命令处理程序代码
-	KillTimer(TIMER_MOVE);
+	KillTimer(TIMER_TYPE_A);
 }
 
 
-void CGameSnakeDlg::OnEnd()
-{
-	// TODO: 在此添加命令处理程序代码
-	KillTimer(TIMER_MOVE);
-}
-
-void CGameSnakeDlg::DrawGame() {
-	for (int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
-			graphics->DrawImage(white, i * UNIN_W, j * UNIN_H, UNIN_W, UNIN_H);
-		}
-	}
-}
-
-void CGameSnakeDlg::OnTimer(UINT_PTR nIDEvent)
+void CGameAsteroidsDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	switch (nIDEvent)
 	{
-	case TIMER_MOVE:
-		DrawGame();
-		break;
+	case TIMER_TYPE_A:
+	{
+		m_x++;
+		m_x %= 20;
+		Invalidate(FALSE);
+	}
+	break;
 	default:
 		break;
 	}
