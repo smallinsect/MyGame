@@ -132,9 +132,13 @@ void CGameAsteroidsDlg::OnPaint()
 {
 	Image bg(TEXT("images/background.jpg"));
 	Image type_A(TEXT("images/explosions/type_A.png"));
+	Image type_B(TEXT("images/explosions/type_B.png"));
+	Image type_C(TEXT("images/explosions/type_C.png"));
 	Graphics graphics(m_hWnd);
 	graphics.DrawImage(&bg, 0, 0);
-	graphics.DrawImage(&type_A, 100, 100, m_x*50, 0, 50, 50, UnitPixel);
+	graphics.DrawImage(&type_A, 100, 100, m_xA * 50, 0, 50, 50, UnitPixel);
+	graphics.DrawImage(&type_B, 300, 100, m_xB * 192, 0, 192, 192, UnitPixel);
+	graphics.DrawImage(&type_C, 600, 100, m_xC * 256, 0, 256, 256, UnitPixel);
 	
 	if (IsIconic())
 	{
@@ -171,7 +175,10 @@ HCURSOR CGameAsteroidsDlg::OnQueryDragIcon()
 void CGameAsteroidsDlg::OnStart()
 {
 	// TODO: 在此添加命令处理程序代码
-	m_x = 0;
+	m_xA = 0;
+	m_xB = 0;
+	m_xC = 0;
+
 	SetTimer(TIMER_TYPE_A, 30, NULL);
 }
 
@@ -190,8 +197,12 @@ void CGameAsteroidsDlg::OnTimer(UINT_PTR nIDEvent)
 	{
 	case TIMER_TYPE_A:
 	{
-		m_x++;
-		m_x %= 20;
+		m_xA++;
+		m_xA %= 20;
+		m_xB++;
+		m_xB %= 64;
+		m_xC++;
+		m_xC %= 48;
 		Invalidate(FALSE);
 	}
 	break;

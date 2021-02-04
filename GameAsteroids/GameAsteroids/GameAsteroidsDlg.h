@@ -18,7 +18,9 @@ public:
 #endif
 
 private:
-	int m_x;
+	int m_xA;
+	int m_xB;
+	int m_xC;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
